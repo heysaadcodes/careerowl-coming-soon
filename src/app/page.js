@@ -139,7 +139,7 @@ const Page = () => {
         <div className="glass-card rounded-3xl px-2 py-6 lg:p-12 backdrop-blur-lg border border-white/20 shadow-2xl flex flex-col items-center">
           {/* Hatching Soon Heading */}
           <Image
-            src={"/careerowl-logo.png"}
+            src={"/careerowl-white-tm.svg"}
             alt="Career Owl Logo"
             width={150}
             height={150}
