@@ -34,8 +34,4 @@ const EmailSchema = new mongoose.Schema(
   }
 );
 
-// Create index for better performance
-EmailSchema.index({ email: 1 });
-EmailSchema.index({ createdAt: -1 });
-
 export default mongoose.models.Email || mongoose.model("Email", EmailSchema);
