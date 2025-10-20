@@ -53,7 +53,6 @@ export default function AdminPage() {
         }
         return;
       }
-
       if (result.isAdmin) {
         setIsAdmin(true);
       }
