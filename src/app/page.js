@@ -17,6 +17,7 @@ const Page = () => {
     minutes: 0,
     seconds: 0
   });
+  const [videoError, setVideoError] = useState(false);
 
   // Set your launch date here
   const launchDate = new Date('2026-01-01T00:00:00').getTime();
@@ -33,6 +34,9 @@ const Page = () => {
           minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((difference % (1000 * 60)) / 1000)
         });
+      } else {
+        // Countdown finished
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     }, 1000);
 
@@ -40,19 +44,32 @@ const Page = () => {
   }, [launchDate]);
 
   useEffect(() => {
-    // Ensure video plays and loops
+    // Ensure video plays and loops with error handling
     if (videoRef.current) {
       videoRef.current.play().catch(error => {
-        console.log("Video autoplay failed:", error);
+        console.log("Video autoplay failed, using fallback:", error);
+        setVideoError(true);
       });
     }
   }, []);
+
+  const handleVideoError = () => {
+    setVideoError(true);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email) {
       setMessage("Please enter your email");
+      setMessageType("error");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage("Please enter a valid email address");
       setMessageType("error");
       return;
     }
@@ -89,18 +106,28 @@ const Page = () => {
 
   return (
     <div className="w-full h-screen flex items-center justify-center flex-col relative overflow-hidden">
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
-      >
-        <source src="/careerowl.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Video Background with Fallback */}
+      {!videoError ? (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onError={handleVideoError}
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        >
+          <source src="/careerowl.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <div
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          style={{
+            background: "linear-gradient(135deg, #78355e 0%, #5a2a4a 50%, #3d1c32 100%)"
+          }}
+        />
+      )}
 
       {/* Overlay for better readability */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
@@ -117,6 +144,7 @@ const Page = () => {
             width={150}
             height={150}
             className="drop-shadow-lg mb-4"
+            priority
           />
           <h1 className="text-4xl lg:text-7xl font-bold text-white text-center mb-8 lg:mb-12 drop-shadow-lg">
             Hatching <span className="text-[#bdff00]">Soon!</span>
@@ -160,6 +188,7 @@ const Page = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="bg-transparent placeholder:text-white/80 border-none text-[16px] lg:text-[18px] outline-none w-full px-2"
               disabled={isLoading}
+              required
             />
             <button
               type="submit"

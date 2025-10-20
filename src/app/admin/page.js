@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CustomInput from "@/components/CustomInput";
 
 export default function AdminPage() {
@@ -14,7 +14,6 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -65,7 +64,8 @@ export default function AdminPage() {
     }
   };
 
-  const fetchEmails = async () => {
+  // Wrap fetchEmails in useCallback to fix the dependency issue
+  const fetchEmails = useCallback(async () => {
     if (!isAdmin) return;
 
     setLoading(true);
@@ -91,11 +91,11 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAdmin]); // Add isAdmin as dependency
 
   useEffect(() => {
     fetchEmails();
-  }, [isAdmin]);
+  }, [fetchEmails]); // Now fetchEmails is properly included in dependencies
 
   const handleLogout = () => {
     setIsAdmin(false);
