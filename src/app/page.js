@@ -241,38 +241,6 @@ const Page = () => {
           </div>
         </div>
       </div>
-
-      {/* Custom Styles for Glassmorphism */}
-      <style jsx>{`
-        .glass-card {
-          background: rgba(120, 53, 94, 0.25);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .glass-timer {
-          background: rgba(120, 53, 94, 0.4);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-        
-        .glass-form {
-          background: rgba(120, 53, 94, 0.3);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-        
-        .glass-social {
-          background: rgba(120, 53, 94, 0.4);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-        
-        .glass-social:hover {
-          background: rgba(120, 53, 94, 0.6);
-        }
-      `}</style>
     </div>
   );
 };
