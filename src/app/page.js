@@ -59,7 +59,7 @@ const Page = () => {
               <div className="text-center">
                 <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2 w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
                   <Image
-                    src="/old-owl-logo.jpeg"
+                    src="/old-owl-logo.png"
                     alt="Old Career Owl Logo"
                     width={60}
                     height={60}

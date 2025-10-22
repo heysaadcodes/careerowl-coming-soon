@@ -42,7 +42,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 htmlFor="name"
                 className="block text-sm font-semibold text-gray-900 mb-1"
               >
-                <span className="text-red-500 mr-1">*</span>Full Name
+                Full Name <span className="text-red-500 mr-1">*</span>
               </label>
               <input
                 type="text"
@@ -61,7 +61,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 htmlFor="company"
                 className="block text-sm font-semibold text-gray-900 mb-1"
               >
-                <span className="text-red-500 mr-1">*</span>Company Name
+                Company Name <span className="text-red-500 mr-1">*</span>
               </label>
               <input
                 type="text"
@@ -80,7 +80,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-900 mb-1"
               >
-                <span className="text-red-500 mr-1">*</span>Email Address
+                Email Address <span className="text-red-500 mr-1">*</span>
               </label>
               <input
                 type="email"
@@ -99,7 +99,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 htmlFor="focusIndustry"
                 className="block text-sm font-semibold text-gray-900 mb-1"
               >
-                <span className="text-red-500 mr-1">*</span>Focus Industry
+                Focus Industry <span className="text-red-500 mr-1">*</span>
               </label>
               <input
                 type="text"
@@ -117,13 +117,13 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all"
+                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold rounded-xl hover:bg-[#a8e600] transition-all shadow-sm"
+                className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold rounded-xl hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer"
               >
                 Submit
               </button>
