@@ -1,23 +1,19 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FiInstagram } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiMail } from "react-icons/fi";
+import EarlyAccessModal from "../components/EarlyAccessModal";
 
 const Page = () => {
   const router = useRouter();
-  const videoRef = useRef(null);
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0
   });
-  const [videoError, setVideoError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Set your launch date here
   const launchDate = new Date('2026-01-01T00:00:00').getTime();
@@ -43,115 +39,80 @@ const Page = () => {
     return () => clearInterval(timer);
   }, [launchDate]);
 
-  useEffect(() => {
-    // Ensure video plays and loops with error handling
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.log("Video autoplay failed, using fallback:", error);
-        setVideoError(true);
-      });
-    }
-  }, []);
-
-  const handleVideoError = () => {
-    setVideoError(true);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!email) {
-      setMessage("Please enter your email");
-      setMessageType("error");
-      return;
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setMessage("Please enter a valid email address");
-      setMessageType("error");
-      return;
-    }
-
-    setIsLoading(true);
-    setMessage("");
-
-    try {
-      const response = await fetch("/api/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("Thank you! You've been added to our early access list.");
-        setMessageType("success");
-        setEmail(""); // Clear the input
-      } else {
-        setMessage(data.error || "Something went wrong. Please try again.");
-        setMessageType("error");
-      }
-    } catch (error) {
-      setMessage("Network error. Please check your connection and try again.");
-      setMessageType("error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const socialLinks = [
+    { icon: FiLinkedin, href: "https://www.linkedin.com/", label: "LinkedIn" },
+    { icon: FiTwitter, href: "https://x.com/", label: "X" },
+    { icon: FiFacebook, href: "https://facebook.com/", label: "Facebook" },
+    { icon: FiInstagram, href: "https://www.instagram.com/", label: "Instagram" },
+    { icon: FiMail, href: "mailto:support@thecareerowl.ca", label: "Email" },
+  ];
 
   return (
-    <div className="w-full h-screen flex items-center justify-center flex-col relative overflow-hidden">
-      {/* Video Background with Fallback */}
-      {!videoError ? (
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          onError={handleVideoError}
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-        >
-          <source src="/careerowl.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      ) : (
-        <div
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-          style={{
-            background: "linear-gradient(135deg, #78355e 0%, #5a2a4a 50%, #3d1c32 100%)"
-          }}
-        />
-      )}
+    <div className="w-full lg:h-screen h-auto flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
+      {/* Left Side - White Background Content */}
+      <div className="lg:w-1/3 w-full h-full bg-white flex items-center justify-center py-12 lg:py-0">
+        <div className="w-full max-w-lg mx-auto px-8">
 
-      {/* Overlay for better readability */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
+          {/* Logo Evolution Section */}
+          <div className="text-center mb-8 lg:mb-12">
+            <div className="flex justify-center items-center gap-4 lg:gap-6 mb-4">
+              {/* Old Logo */}
+              <div className="text-center">
+                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2">
+                  <Image
+                    src="/new-owl-logo.svg"
+                    alt="Old Career Owl Logo"
+                    width={60}
+                    height={60}
+                    className="mx-auto"
+                  />
+                </div>
+                <span className="text-sm text-gray-500 font-medium">Then</span>
+              </div>
 
-      {/* Content */}
-      <div className="relative z-20 w-full max-w-4xl mx-auto px-4">
+              {/* Evolution Arrow */}
+              <div className="flex flex-col items-center justify-center">
+                <div className="w-6 h-6 lg:w-8 lg:h-8 bg-[#bdff00] rounded-full flex items-center justify-center mb-1">
+                  <svg
+                    className="w-3 h-3 lg:w-4 lg:h-4 text-gray-800 transform rotate-45"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </div>
+                <span className="text-xs text-gray-400 font-medium">Evolving</span>
+              </div>
 
-        {/* Main Content Container with Glassmorphism */}
-        <div className="glass-card rounded-3xl px-2 py-6 lg:p-12 backdrop-blur-lg border border-white/20 shadow-2xl flex flex-col items-center">
-          {/* Hatching Soon Heading */}
-          <Image
-            src={"/careerowl-white-tm.svg"}
-            alt="Career Owl Logo"
-            width={150}
-            height={150}
-            className="drop-shadow-lg mb-4"
-            priority
-          />
-          <h1 className="text-4xl lg:text-7xl font-bold text-white text-center mb-8 lg:mb-12 drop-shadow-lg">
-            Hatching <span className="text-[#bdff00]">Soon!</span>
+              {/* New Logo */}
+              <div className="text-center">
+                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2">
+                  <Image
+                    src="/new-owl-logo.svg"
+                    alt="New Career Owl Logo"
+                    width={60}
+                    height={60}
+                    className="mx-auto"
+                  />
+                </div>
+                <span className="text-sm text-gray-500 font-medium">Now</span>
+              </div>
+            </div>
+
+            <p className="text-gray-600 text-sm max-w-md mx-auto">
+              We're evolving to serve you better! Our new identity reflects our commitment to
+              innovative career solutions and growth.
+            </p>
+          </div>
+
+          {/* Heading */}
+          <h1 className="text-3xl lg:text-5xl font-bold text-gray-800 text-center mb-6 lg:mb-8">
+            Hatching <span className="text-[#78355e]">Soon!</span>
           </h1>
 
-          {/* Timer with Glassmorphism */}
-          <div className="flex justify-center items-center gap-2 lg:gap-6 mb-12">
+          {/* Timer */}
+          <div className="flex justify-center items-center gap-2 lg:gap-4 mb-8 lg:mb-12">
             {[
               { value: timeLeft.days, label: 'Days' },
               { value: timeLeft.hours, label: 'Hours' },
@@ -160,15 +121,15 @@ const Page = () => {
             ].map((item, index) => (
               <div key={item.label} className="flex items-center">
                 <div className="text-center">
-                  <div className="glass-timer text-white text-2xl lg:text-4xl font-bold rounded-xl px-4 py-3 lg:px-6 lg:py-4 min-w-[70px] lg:min-w-[90px] border border-white/20 shadow-lg">
+                  <div className="bg-gray-100 text-gray-800 text-lg lg:text-2xl font-bold rounded-lg px-2 lg:px-4 py-2 lg:py-3 min-w-[50px] lg:min-w-[70px] border border-gray-200 shadow-sm">
                     {item.value.toString().padStart(2, '0')}
                   </div>
-                  <div className="text-white text-sm lg:text-base mt-2 font-medium drop-shadow">
+                  <div className="text-gray-600 text-xs lg:text-sm mt-1 font-medium">
                     {item.label}
                   </div>
                 </div>
                 {index < 3 && (
-                  <div className="text-white text-xl lg:text-3xl font-bold mx-1 lg:mx-3 drop-shadow">
+                  <div className="text-gray-400 text-sm lg:text-xl font-bold mx-1 lg:mx-2">
                     :
                   </div>
                 )}
@@ -176,71 +137,82 @@ const Page = () => {
             ))}
           </div>
 
-          {/* Email Form with Glassmorphism */}
-          <form
-            onSubmit={handleSubmit}
-            className="glass-form flex w-full lg:w-[600px] mx-auto font-normal text-white h-[64px] lg:h-[78px] justify-between items-center px-2 rounded-full border border-white/20 shadow-lg"
-          >
-            <input
-              type="email"
-              placeholder="Your email address..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent placeholder:text-white/80 border-none text-[16px] lg:text-[18px] outline-none w-full px-2"
-              disabled={isLoading}
-              required
-            />
+          <div className="w-full flex items-center justify-center mb-8 lg:mb-0">
             <button
-              type="submit"
-              disabled={isLoading}
-              className="bg-[#bdff00] hover:bg-[#a8e600] text-[#1B1F3B] text-[16px] lg:text-[18px] font-semibold px-6 h-[48px] lg:h-[58px] flex justify-center items-center rounded-full ml-2 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg text-nowrap cursor-pointer"
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 text-[15px] lg:text-[16px] font-semibold px-5 h-[44px] lg:h-[52px] flex justify-center items-center rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-sm text-nowrap cursor-pointer"
             >
-              {isLoading ? "Saving..." : "Get early access"}
+              Get early access
             </button>
-          </form>
+          </div>
 
-          {/* Message display */}
-          {message && (
-            <div
-              className={`text-center mt-6 text-[16px] font-medium ${messageType === "success" ? "text-[#bdff00]" : "text-red-300"} drop-shadow`}
-            >
-              {message}
-            </div>
-          )}
-
-          {/* Social Links with Glassmorphism */}
-          <div className="flex justify-center gap-4 lg:gap-6 items-center mt-10">
-            {[
-              { icon: "/link.svg", href: "https://www.linkedin.com/", alt: "LinkedIn" },
-              { icon: "/x.svg", href: "https://x.com/", alt: "X" },
-              { icon: "/main.svg", href: "mailto:support@thecareerowl.ca", alt: "Email" },
-            ].map((social) => (
-              <div
-                key={social.alt}
-                className="glass-social rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-white/20 shadow-lg"
-                onClick={() => router.push(social.href)}
-              >
-                <Image
-                  src={social.icon}
-                  alt={social.alt}
-                  width={54}
-                  height={54}
-                  className="filter brightness-0 invert"
-                />
-              </div>
-            ))}
-            <div
-              className="glass-social rounded-full p-3 cursor-pointer transform hover:scale-110 transition-all duration-300 border shadow-lg border-white flex justify-center items-center"
-              onClick={() => router.push("https://www.instagram.com")}
-            >
-              <FiInstagram
-                className="text-white"
-                size={32}
-              />
-            </div>
+          {/* Social Links */}
+          <div className="flex justify-center gap-3 lg:gap-6 items-center mt-8 lg:mt-10">
+            {socialLinks.map((social) => {
+              const IconComponent = social.icon;
+              return (
+                <div
+                  key={social.label}
+                  className="rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-gray-200 shadow-lg bg-[#78355e] p-3 flex items-center justify-center"
+                  onClick={() => router.push(social.href)}
+                >
+                  <IconComponent
+                    className="text-white"
+                    size={24}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
+
+      {/* Right Side - Image Section */}
+      <div className="lg:w-2/3 w-full lg:h-full h-96 relative overflow-hidden">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-bl from-transparent via-transparent to-white/10 z-10"></div>
+
+        {/* Background Image */}
+        <Image
+          src="/owl-bg.jpg"
+          alt="Career Owl Background"
+          fill
+          className="w-full h-full object-cover object-center lg:object-left-bottom"
+          priority
+        />
+
+        {/* Curved SVG - Only show on desktop */}
+        <div className="absolute top-0 left-0 w-full h-full z-20 hidden lg:block">
+          <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="fill-white"
+          >
+            <path d="M0,0 C0,0 0,150 150,100 L0,100 Z" />
+          </svg>
+        </div>
+
+        {/* Mobile curved bottom */}
+        <div className="absolute bottom-0 left-0 w-full z-20 lg:hidden">
+          <svg
+            width="100%"
+            height="80"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="fill-white"
+          >
+            <path d="M0,100 L100,100 L100,0 C100,0 50,50 0,0 Z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Early Access Modal */}
+      <EarlyAccessModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
