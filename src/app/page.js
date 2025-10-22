@@ -49,7 +49,7 @@ const Page = () => {
   return (
     <div className="w-full lg:h-screen h-auto flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
       {/* Left Side - White Background Content */}
-      <div className="lg:w-1/3 w-full h-full bg-white flex items-center justify-center py-12 lg:py-0">
+      <div className="lg:w-1/3 w-full h-full bg-white flex items-center justify-center pb-4 lg:py-0">
         <div className="w-full max-w-lg mx-auto px-8">
 
           {/* Logo Evolution Section */}
