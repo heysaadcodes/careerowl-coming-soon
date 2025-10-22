@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiMail } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
 import EarlyAccessModal from "../components/EarlyAccessModal";
 
 const Page = () => {
@@ -40,11 +40,10 @@ const Page = () => {
   }, [launchDate]);
 
   const socialLinks = [
-    { icon: FiLinkedin, href: "https://www.linkedin.com/", label: "LinkedIn" },
-    { icon: FiTwitter, href: "https://x.com/", label: "X" },
-    { icon: FiFacebook, href: "https://facebook.com/", label: "Facebook" },
-    { icon: FiInstagram, href: "https://www.instagram.com/", label: "Instagram" },
-    { icon: FiMail, href: "mailto:support@thecareerowl.ca", label: "Email" },
+    { icon: FiLinkedin, href: "https://www.linkedin.com/company/careerowl", label: "LinkedIn" },
+    { icon: FiFacebook, href: "https://www.facebook.com/careerowl.ca", label: "Facebook" },
+    { icon: FiInstagram, href: "https://www.instagram.com/careerowl.ca/", label: "Instagram" },
+    { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube" },    
   ];
 
   return (
@@ -58,13 +57,13 @@ const Page = () => {
             <div className="flex justify-center items-center gap-4 lg:gap-6 mb-4">
               {/* Old Logo */}
               <div className="text-center">
-                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2">
+                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2 w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
                   <Image
-                    src="/new-owl-logo.svg"
+                    src="/old-owl-logo.jpeg"
                     alt="Old Career Owl Logo"
                     width={60}
                     height={60}
-                    className="mx-auto"
+                    className="mx-auto object-contain max-w-full max-h-full"
                   />
                 </div>
                 <span className="text-sm text-gray-500 font-medium">Then</span>
@@ -87,13 +86,13 @@ const Page = () => {
 
               {/* New Logo */}
               <div className="text-center">
-                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2">
+                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2 w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
                   <Image
                     src="/new-owl-logo.svg"
                     alt="New Career Owl Logo"
                     width={60}
                     height={60}
-                    className="mx-auto"
+                    className="mx-auto object-contain max-w-full max-h-full"
                   />
                 </div>
                 <span className="text-sm text-gray-500 font-medium">Now</span>
@@ -167,6 +166,7 @@ const Page = () => {
         </div>
       </div>
 
+      
       {/* Right Side - Image Section */}
       <div className="lg:w-2/3 w-full lg:h-full h-96 relative overflow-hidden">
         {/* Gradient Overlay */}
@@ -177,7 +177,7 @@ const Page = () => {
           src="/owl-bg.jpg"
           alt="Career Owl Background"
           fill
-          className="w-full h-full object-cover object-center lg:object-left-bottom"
+          className="w-full h-full object-cover object-[center_30%] lg:object-left-bottom"
           priority
         />
 
@@ -198,7 +198,7 @@ const Page = () => {
         <div className="absolute bottom-0 left-0 w-full z-20 lg:hidden">
           <svg
             width="100%"
-            height="80"
+            height="70"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
             className="fill-white"
