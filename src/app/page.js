@@ -43,7 +43,7 @@ const Page = () => {
     { icon: FiLinkedin, href: "https://www.linkedin.com/company/careerowl", label: "LinkedIn" },
     { icon: FiFacebook, href: "https://www.facebook.com/careerowl.ca", label: "Facebook" },
     { icon: FiInstagram, href: "https://www.instagram.com/careerowl.ca/", label: "Instagram" },
-    { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube" },    
+    { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube" },
   ];
 
   return (
@@ -100,7 +100,7 @@ const Page = () => {
             </div>
 
             <p className="text-gray-600 text-sm max-w-md mx-auto">
-              We're evolving to serve you better! Our new identity reflects our commitment to
+              We&apos;re evolving to serve you better! Our new identity reflects our commitment to
               innovative career solutions and growth.
             </p>
           </div>
@@ -166,7 +166,7 @@ const Page = () => {
         </div>
       </div>
 
-      
+
       {/* Right Side - Image Section */}
       <div className="lg:w-2/3 w-full lg:h-full h-96 relative overflow-hidden">
         {/* Gradient Overlay */}
