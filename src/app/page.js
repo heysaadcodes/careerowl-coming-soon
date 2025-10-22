@@ -44,12 +44,12 @@ const Page = () => {
   return (
     <div className="w-full min-h-screen lg:h-screen flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
       {/* Left Side - White Background Content */}
-      <div className="lg:w-[45%] w-full h-full bg-white flex items-center justify-center py-8 sm:py-10">
-        <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="lg:w-[45%] w-full h-full bg-white flex items-center justify-center py-8 sm:py-10 gap-2">
+        <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col items-center justify-center gap-4">
 
           {/* Logo Evolution Section */}
-          <div className="text-center mb-6">
-            <div className="flex justify-center items-center gap-4 sm:gap-6 lg:gap-7 xl:gap-8 mb-3 sm:mb-4 lg:mb-5">
+          <div className="text-center">
+            <div className="flex justify-center items-center gap-4 sm:gap-6 lg:gap-7 xl:gap-8 mb-3 ">
               {/* Old Logo */}
               <div className="text-center flex-shrink-0">
                 <div className="bg-gray-100 rounded-2xl p-3 sm:p-4 lg:p-4 xl:p-5 border border-gray-200 shadow-sm mb-2 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 flex items-center justify-center">
@@ -90,19 +90,19 @@ const Page = () => {
               </div>
             </div>
 
-            <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl max-w-md lg:max-w-lg mx-auto leading-relaxed px-2">
+            <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl max-w-md lg:max-w-lg mx-auto px-2">
               We're evolving to serve you better! Our new identity reflects our commitment to
               innovative career solutions and growth.
             </p>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 text-center mb-5 sm:mb-6 leading-tight whitespace-nowrap">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 text-center leading-tight whitespace-nowrap">
             Hatching <span className="text-[#78355e]">Soon!</span>
           </h1>
 
           {/* Timer */}
-          <div className="flex justify-center items-center gap-1.5 sm:gap-2 lg:gap-3 xl:gap-4 mb-6">
+          <div className="flex justify-center items-center gap-1.5 sm:gap-2 lg:gap-3 xl:gap-4">
             {[
               { value: timeLeft.days, label: 'Days' },
               { value: timeLeft.hours, label: 'Hours' },
@@ -127,7 +127,7 @@ const Page = () => {
             ))}
           </div>
 
-          <div className="w-full flex items-center justify-center mb-6">
+          <div className="w-full flex items-center justify-center">
             <button
               onClick={() => setIsModalOpen(true)}
               className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-6 sm:px-8 lg:px-10 xl:px-12 h-[45px] sm:h-[48px] lg:h-[52px] xl:h-[58px] 2xl:h-[64px] flex justify-center items-center rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-md text-nowrap cursor-pointer"
@@ -137,7 +137,7 @@ const Page = () => {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center gap-3 sm:gap-4 lg:gap-5 xl:gap-6 items-center mt-6">
+          <div className="flex justify-center gap-3 sm:gap-4 lg:gap-5 xl:gap-6 items-center">
             {socialLinks.map((social) => {
               const IconComponent = social.icon;
               return (
