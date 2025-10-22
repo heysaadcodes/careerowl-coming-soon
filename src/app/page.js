@@ -1,51 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
-
-const EarlyAccessModal = ({ isOpen, onClose }) => {
-  const [email, setEmail] = useState('');
-
-  if (!isOpen) return null;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Email submitted:', email);
-    setEmail('');
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Get Early Access</h2>
-        <p className="text-gray-600 mb-6">Sign up to be notified when we launch!</p>
-        <div className="space-y-4">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bdff00]"
-          />
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold py-3 rounded-lg transition-all"
-          >
-            Notify Me
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+import EarlyAccessModal from "../components/EarlyAccessModal";
 
 const Page = () => {
   const [timeLeft, setTimeLeft] = useState({
