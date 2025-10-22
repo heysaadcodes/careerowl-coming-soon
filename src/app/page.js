@@ -1,12 +1,53 @@
 "use client";
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
-import EarlyAccessModal from "../components/EarlyAccessModal";
+
+const EarlyAccessModal = ({ isOpen, onClose }) => {
+  const [email, setEmail] = useState('');
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Email submitted:', email);
+    setEmail('');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Get Early Access</h2>
+        <p className="text-gray-600 mb-6">Sign up to be notified when we launch!</p>
+        <div className="space-y-4">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bdff00]"
+          />
+          <button
+            onClick={handleSubmit}
+            className="w-full bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold py-3 rounded-lg transition-all"
+          >
+            Notify Me
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Page = () => {
-  const router = useRouter();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -15,7 +56,6 @@ const Page = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Set your launch date here
   const launchDate = new Date('2026-01-01T00:00:00').getTime();
 
   useEffect(() => {
@@ -31,7 +71,6 @@ const Page = () => {
           seconds: Math.floor((difference % (1000 * 60)) / 1000)
         });
       } else {
-        // Countdown finished
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     }, 1000);
@@ -47,33 +86,31 @@ const Page = () => {
   ];
 
   return (
-    <div className="w-full lg:h-screen h-auto flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
+    <div className="w-full min-h-screen lg:h-screen flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
       {/* Left Side - White Background Content */}
-      <div className="lg:w-1/3 w-full h-full bg-white flex items-center justify-center pb-4 lg:py-0">
-        <div className="w-full max-w-lg mx-auto px-8">
+      <div className="lg:w-[45%] w-full h-full bg-white flex items-center justify-center py-8 sm:py-10 lg:py-0">
+        <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
 
           {/* Logo Evolution Section */}
-          <div className="text-center mb-8 lg:mb-12">
-            <div className="flex justify-center items-center gap-4 lg:gap-6 mb-4">
+          <div className="text-center mb-6 sm:mb-8 lg:mb-8 xl:mb-10">
+            <div className="flex justify-center items-center gap-4 sm:gap-6 lg:gap-7 xl:gap-8 mb-3 sm:mb-4 lg:mb-5">
               {/* Old Logo */}
-              <div className="text-center">
-                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2 w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
-                  <Image
+              <div className="text-center flex-shrink-0">
+                <div className="bg-gray-100 rounded-2xl p-3 sm:p-4 lg:p-4 xl:p-5 border border-gray-200 shadow-sm mb-2 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 flex items-center justify-center">
+                  <img
                     src="/old-owl-logo.png"
                     alt="Old Career Owl Logo"
-                    width={60}
-                    height={60}
-                    className="mx-auto object-contain max-w-full max-h-full"
+                    className="mx-auto object-contain w-full h-full"
                   />
                 </div>
-                <span className="text-sm text-gray-500 font-medium">Then</span>
+                <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Then</span>
               </div>
 
               {/* Evolution Arrow */}
-              <div className="flex flex-col items-center justify-center">
-                <div className="w-6 h-6 lg:w-8 lg:h-8 bg-[#bdff00] rounded-full flex items-center justify-center mb-1">
+              <div className="flex flex-col items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 bg-[#bdff00] rounded-full flex items-center justify-center mb-1">
                   <svg
-                    className="w-3 h-3 lg:w-4 lg:h-4 text-gray-800 transform rotate-45"
+                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-gray-800 transform rotate-45"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -81,37 +118,35 @@ const Page = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </div>
-                <span className="text-xs text-gray-400 font-medium">Evolving</span>
+                <span className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-700 font-bold block">Evolving</span>
               </div>
 
               {/* New Logo */}
-              <div className="text-center">
-                <div className="bg-gray-100 rounded-2xl p-3 lg:p-4 border border-gray-200 shadow-sm mb-2 w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
-                  <Image
+              <div className="text-center flex-shrink-0">
+                <div className="bg-gray-100 rounded-2xl p-3 sm:p-4 lg:p-4 xl:p-5 border border-gray-200 shadow-sm mb-2 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 flex items-center justify-center">
+                  <img
                     src="/new-owl-logo.svg"
                     alt="New Career Owl Logo"
-                    width={60}
-                    height={60}
-                    className="mx-auto object-contain max-w-full max-h-full"
+                    className="mx-auto object-contain w-full h-full"
                   />
                 </div>
-                <span className="text-sm text-gray-500 font-medium">Now</span>
+                <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Now</span>
               </div>
             </div>
 
-            <p className="text-gray-600 text-sm max-w-md mx-auto">
-              We&apos;re evolving to serve you better! Our new identity reflects our commitment to
+            <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl max-w-md lg:max-w-lg mx-auto leading-relaxed px-2">
+              We're evolving to serve you better! Our new identity reflects our commitment to
               innovative career solutions and growth.
             </p>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl lg:text-5xl font-bold text-gray-800 text-center mb-6 lg:mb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 text-center mb-5 sm:mb-6 lg:mb-8 xl:mb-10 leading-tight whitespace-nowrap">
             Hatching <span className="text-[#78355e]">Soon!</span>
           </h1>
 
           {/* Timer */}
-          <div className="flex justify-center items-center gap-2 lg:gap-4 mb-8 lg:mb-12">
+          <div className="flex justify-center items-center gap-1.5 sm:gap-2 lg:gap-3 xl:gap-4 mb-6 sm:mb-8 lg:mb-10 xl:mb-12">
             {[
               { value: timeLeft.days, label: 'Days' },
               { value: timeLeft.hours, label: 'Hours' },
@@ -120,15 +155,15 @@ const Page = () => {
             ].map((item, index) => (
               <div key={item.label} className="flex items-center">
                 <div className="text-center">
-                  <div className="bg-gray-100 text-gray-800 text-lg lg:text-2xl font-bold rounded-lg px-2 lg:px-4 py-2 lg:py-3 min-w-[50px] lg:min-w-[70px] border border-gray-200 shadow-sm">
+                  <div className="bg-gray-100 text-gray-800 text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold rounded-xl px-2 sm:px-3 lg:px-4 xl:px-5 py-2 sm:py-2.5 lg:py-3 xl:py-4 min-w-[50px] sm:min-w-[55px] lg:min-w-[65px] xl:min-w-[80px] 2xl:min-w-[95px] border border-gray-200 shadow-sm">
                     {item.value.toString().padStart(2, '0')}
                   </div>
-                  <div className="text-gray-600 text-xs lg:text-sm mt-1 font-medium">
+                  <div className="text-gray-600 text-xs sm:text-sm lg:text-base xl:text-lg mt-1.5 sm:mt-2 font-semibold">
                     {item.label}
                   </div>
                 </div>
                 {index < 3 && (
-                  <div className="text-gray-400 text-sm lg:text-xl font-bold mx-1 lg:mx-2">
+                  <div className="text-gray-400 text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold mx-1 sm:mx-1.5 lg:mx-2 xl:mx-2.5">
                     :
                   </div>
                 )}
@@ -136,28 +171,27 @@ const Page = () => {
             ))}
           </div>
 
-          <div className="w-full flex items-center justify-center mb-8 lg:mb-0">
+          <div className="w-full flex items-center justify-center mb-6 sm:mb-8 lg:mb-0">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 text-[15px] lg:text-[16px] font-semibold px-5 h-[44px] lg:h-[52px] flex justify-center items-center rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-sm text-nowrap cursor-pointer"
+              className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-6 sm:px-8 lg:px-10 xl:px-12 h-[45px] sm:h-[48px] lg:h-[52px] xl:h-[58px] 2xl:h-[64px] flex justify-center items-center rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-md text-nowrap cursor-pointer"
             >
               Get early access
             </button>
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center gap-3 lg:gap-6 items-center mt-8 lg:mt-10">
+          <div className="flex justify-center gap-3 sm:gap-4 lg:gap-5 xl:gap-6 items-center mt-6 sm:mt-8 lg:mt-10 xl:mt-12">
             {socialLinks.map((social) => {
               const IconComponent = social.icon;
               return (
                 <div
                   key={social.label}
-                  className="rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-gray-200 shadow-lg bg-[#78355e] p-3 flex items-center justify-center"
-                  onClick={() => router.push(social.href)}
+                  className="rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-gray-200 shadow-lg bg-[#78355e] p-2.5 sm:p-3 lg:p-3.5 xl:p-4 flex items-center justify-center"
+                  onClick={() => window.open(social.href, '_blank')}
                 >
                   <IconComponent
-                    className="text-white"
-                    size={24}
+                    className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
                   />
                 </div>
               );
@@ -168,17 +202,15 @@ const Page = () => {
 
 
       {/* Right Side - Image Section */}
-      <div className="lg:w-2/3 w-full lg:h-full h-96 relative overflow-hidden">
+      <div className="lg:w-[55%] w-full lg:h-full h-80 sm:h-96 relative overflow-hidden">
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-bl from-transparent via-transparent to-white/10 z-10"></div>
 
         {/* Background Image */}
-        <Image
+        <img
           src="/owl-bg.jpg"
           alt="Career Owl Background"
-          fill
-          className="w-full h-full object-cover object-[center_30%] lg:object-left-bottom"
-          priority
+          className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-left-bottom"
         />
 
         {/* Curved SVG - Only show on desktop */}
