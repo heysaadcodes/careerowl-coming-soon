@@ -29,7 +29,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full transform transition-all">
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">
             Get Early Access
           </h2>
           <p className="text-gray-700 mb-6">
@@ -50,7 +50,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
                 placeholder="Enter your full name"
                 required
               />
@@ -69,7 +69,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
                 placeholder="Enter your company name"
                 required
               />
@@ -88,7 +88,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
                 placeholder="Enter your email"
                 required
               />
@@ -107,7 +107,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 name="focusIndustry"
                 value={formData.focusIndustry}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
                 placeholder="Enter your focus industry"
                 required
               />
@@ -117,13 +117,13 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer rounded-full"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold rounded-xl hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer"
+                className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer rounded-full"
               >
                 Submit
               </button>
