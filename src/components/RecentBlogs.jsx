@@ -51,10 +51,6 @@ const RecentBlogs = () => {
                 {/* Meta Info */}
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                   <div className="flex items-center gap-1">
-                    <FiClock className="w-4 h-4" />
-                    <span>{blog.readTime}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
                     <FiUser className="w-4 h-4" />
                     <span>{blog.author}</span>
                   </div>
