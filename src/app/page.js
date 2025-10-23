@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
 import EarlyAccessModal from "../components/EarlyAccessModal";
+import Features from "../components/Features";
 
 const Page = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -42,6 +43,7 @@ const Page = () => {
   ];
 
   return (
+    <>
     <div className="w-full min-h-screen lg:h-screen flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">
       {/* Left Side - White Background Content */}
       <div className="lg:w-[45%] w-full h-full bg-white flex items-center justify-center py-8 sm:py-10">
@@ -56,8 +58,7 @@ const Page = () => {
                   <img
                     src="/old-owl-logo.png"
                     alt="Old Career Owl Logo"
-                    className="mx-auto object-contain w-full h-full"
-                  />
+                    className="mx-auto object-contain w-full h-full" />
                 </div>
                 <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Then</span>
               </div>
@@ -83,8 +84,7 @@ const Page = () => {
                   <img
                     src="/new-owl-logo.svg"
                     alt="New Career Owl Logo"
-                    className="mx-auto object-contain w-full h-full"
-                  />
+                    className="mx-auto object-contain w-full h-full" />
                 </div>
                 <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Now</span>
               </div>
@@ -147,8 +147,7 @@ const Page = () => {
                   onClick={() => window.open(social.href, '_blank')}
                 >
                   <IconComponent
-                    className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
-                  />
+                    className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8" />
                 </div>
               );
             })}
@@ -166,8 +165,7 @@ const Page = () => {
         <img
           src="/owl-bg.jpg"
           alt="Career Owl Background"
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-left-bottom"
-        />
+          className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-left-bottom" />
 
         {/* Curved SVG - Only show on desktop */}
         <div className="absolute top-0 left-0 w-full h-full z-20 hidden lg:block">
@@ -199,9 +197,10 @@ const Page = () => {
       {/* Early Access Modal */}
       <EarlyAccessModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+        onClose={() => setIsModalOpen(false)} />
     </div>
+    <Features />
+    </>
   );
 };
 
