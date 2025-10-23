@@ -162,7 +162,7 @@ const Page = () => {
 
         {/* Background Image */}
         <img
-          src="/owl-bg.jpg"
+          src="/owl-bg.jpeg"
           alt="Career Owl Background"
           className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-left-bottom" />
 
