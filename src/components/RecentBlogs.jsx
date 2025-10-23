@@ -1,23 +1,26 @@
 "use client";
-import React from 'react';
-import Link from 'next/link';
-import { FiClock, FiUser, FiArrowRight } from 'react-icons/fi';
-import blogsData from '../data/blogs.json';
+import React from "react";
+import Link from "next/link";
+import { FiClock, FiUser, FiArrowRight } from "react-icons/fi";
+import blogsData from "../data/blogs.json";
 
 const RecentBlogs = () => {
   // Get the first 3 blogs
   const recentBlogs = blogsData.blogs.slice(0, 3);
 
   return (
-    <div className="w-full bg-gradient-to-b from-gray-50 to-white py-20 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gradient-to-b from-gray-50 to-white py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-            Latest from Our <span className="text-[#78355e]">Blog</span>
+
+        <div className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 mb-4">
+            Latest from <br />
+            <span className="text-[#78355e]">CareerOwl</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Insights, tips, and updates about the future of hiring and career development
+            Insights, tips, and updates about the future of hiring and career
+            development
           </p>
         </div>
 

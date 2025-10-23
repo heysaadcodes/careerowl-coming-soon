@@ -2,8 +2,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { FiClock, FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar } from 'react-icons/fi';
+import { FiClock, FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowLeftCircle } from 'react-icons/fi';
 import blogsData from '@/data/blogs.json';
+import CallToAction from '@/components/CallToAction';
 
 const BlogDetailPage = () => {
   const params = useParams();
@@ -39,18 +40,15 @@ const BlogDetailPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Back Button */}
-      <div className="max-w-4xl mx-auto px-4 pt-8">
-        <Link
-          href="/blogs"
-          className="inline-flex items-center gap-2 text-[#78355e] hover:text-[#9d4577] font-semibold transition-colors"
-        >
-          <FiArrowLeft className="w-5 h-5" />
+      <div className="max-w-7xl mx-auto px-4 pt-8">
+        <Link href="/blogs" className="inline-flex items-center gap-2 text-black hover:text-gray-800 font-semibold transition-colors">
+          <FiArrowLeftCircle className="w-6 h-6" />
           <span>Back to Blogs</span>
         </Link>
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-10">
         {/* Category Badge */}
         <div className="mb-6">
           <span className="inline-flex items-center gap-2 bg-[#78355e] text-white px-4 py-2 rounded-full text-sm font-bold">
@@ -73,10 +71,6 @@ const BlogDetailPage = () => {
           <div className="flex items-center gap-2">
             <FiCalendar className="w-5 h-5 text-[#2563eb]" />
             <span>{formatDate(blog.date)}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <FiClock className="w-5 h-5 text-[#2563eb]" />
-            <span>{blog.readTime}</span>
           </div>
         </div>
 
@@ -145,12 +139,12 @@ const BlogDetailPage = () => {
               >
                 Read More Articles
               </Link>
-              <Link
+              {/* <Link
                 href="/"
                 className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold px-6 py-3 rounded-full transition-all duration-300"
               >
                 Get Early Access
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -158,7 +152,7 @@ const BlogDetailPage = () => {
 
       {/* Related/Navigation Blogs */}
       {(previousBlog || nextBlog) && (
-        <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="max-w-7xl mx-auto px-4 py-10">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">Continue Reading</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Previous Blog */}
@@ -197,22 +191,7 @@ const BlogDetailPage = () => {
       )}
 
       {/* Final CTA */}
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <div className="bg-gradient-to-r from-[#78355e] to-[#9d4577] rounded-3xl p-12 text-center">
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Ready to Experience the Future of Hiring?
-          </h3>
-          <p className="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
-            Join thousands of employers and job seekers who are already waiting for our launch in January 2026
-          </p>
-          <Link
-            href="/"
-            className="inline-block bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            Get Early Access
-          </Link>
-        </div>
-      </div>
+      <CallToAction />
     </div>
   );
 };

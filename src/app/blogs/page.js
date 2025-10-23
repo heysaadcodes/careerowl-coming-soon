@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FiClock, FiUser, FiTag, FiArrowRight, FiSearch } from 'react-icons/fi';
+import { FiClock, FiUser, FiTag, FiArrowRight, FiSearch, FiArrowLeft, FiArrowLeftCircle } from 'react-icons/fi';
 import blogsData from '@/data/blogs.json';
+import CallToAction from '@/components/CallToAction';
 
 const BlogsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,7 +15,7 @@ const BlogsPage = () => {
   // Filter blogs based on search and category
   const filteredBlogs = blogsData.blogs.filter(blog => {
     const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || blog.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -23,6 +24,12 @@ const BlogsPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#78355e] to-[#9d4577] py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-2 text-white hover:text-gray-200 font-semibold transition-colors">
+            <FiArrowLeftCircle className="w-6 h-6" />
+            <span>Home</span>
+          </Link>
+        </div>
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
             CareerOwl Blog
@@ -52,11 +59,10 @@ const BlogsPage = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
-                selectedCategory === category
-                  ? 'bg-[#78355e] text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-[#2563eb]'
-              }`}
+              className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
+                ? 'bg-[#78355e] text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-[#2563eb]'
+                }`}
             >
               {category}
             </button>
@@ -65,7 +71,7 @@ const BlogsPage = () => {
       </div>
 
       {/* Blog Grid */}
-      <div className="max-w-7xl mx-auto px-4 pb-20">
+      <div className="max-w-7xl mx-auto px-4 pb-10">
         {filteredBlogs.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
@@ -129,23 +135,8 @@ const BlogsPage = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <div className="bg-gradient-to-r from-[#78355e] to-[#9d4577] rounded-3xl p-12 text-center">
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Want to Be Part of the Journey?
-          </h3>
-          <p className="text-white/90 text-lg mb-6">
-            Get early access to CareerOwl when we launch in January 2026
-          </p>
-          <Link
-            href="/"
-            className="inline-block bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            Get Early Access
-          </Link>
-        </div>
-      </div>
-    </div>
+      <CallToAction />
+    </div >
   );
 };
 
