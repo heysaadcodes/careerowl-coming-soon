@@ -164,7 +164,7 @@ const Page = () => {
         <img
           src="/owl-bg.jpeg"
           alt="Career Owl Background"
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-left-bottom" />
+          className="absolute inset-0 w-full h-full object-cover object-[center_30%] lg:object-right-bottom" />
 
         {/* Curved SVG - Only show on desktop */}
         <div className="absolute top-0 left-0 w-full h-full z-20 hidden lg:block">

@@ -127,12 +127,12 @@ const Features = () => {
   );
 
   return (
-    <div className="w-full bg-gradient-to-b from-white to-gray-50 py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gradient-to-b from-white to-gray-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16 mt-8 sm:mt-12 lg:mt-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 mb-4">
-            Powerful Features for <span className="text-[#78355e]">Everyone</span>
+            Powerful Features for <br /><span className="text-[#78355e]">Everyone</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             A comprehensive platform designed to connect talent with opportunity seamlessly
