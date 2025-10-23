@@ -120,7 +120,7 @@ const Features = () => {
         <Icon className="w-6 h-6 text-gray-800" />
       </div>
       <h3 className="text-lg font-bold text-gray-800 mb-2">{title}</h3>
-      <p className="text-gray-700 text-sm leading-relaxed">{description}</p>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </div>
   );
 
@@ -132,7 +132,7 @@ const Features = () => {
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
             Powerful Features for <span className="text-[#78355e]">Everyone</span>
           </h2>
-          <p className="text-gray-700 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             A comprehensive platform designed to connect talent with opportunity seamlessly
           </p>
         </div>
@@ -159,7 +159,7 @@ const Features = () => {
         {/* For Applicants */}
         <div className="mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="bg-[#bdff00] text-gray-800 px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
+            <div className="bg-[#78355e] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
               <FiUsers className="w-5 h-5" />
               For Applicants
             </div>
@@ -169,7 +169,7 @@ const Features = () => {
               <FeatureCard 
                 key={index} 
                 {...feature} 
-                accentColor="bg-[#bdff00]/30"
+                accentColor="bg-[#78355e]/10"
               />
             ))}
           </div>
@@ -178,7 +178,7 @@ const Features = () => {
         {/* For Everyone */}
         <div>
           <div className="flex items-center justify-center mb-8">
-            <div className="bg-gray-800 text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
+            <div className="bg-[#78355e] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
               <FiCheckCircle className="w-5 h-5" />
               For Everyone
             </div>
@@ -188,7 +188,7 @@ const Features = () => {
               <FeatureCard 
                 key={index} 
                 {...feature} 
-                accentColor="bg-gray-100"
+                accentColor="bg-[#78355e]/10"
               />
             ))}
           </div>
