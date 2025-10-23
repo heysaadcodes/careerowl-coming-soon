@@ -67,15 +67,15 @@ const BlogDetailPage = () => {
         {/* Meta Information */}
         <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-8 pb-8 border-b border-gray-200">
           <div className="flex items-center gap-2">
-            <FiUser className="w-5 h-5 text-[#78355e]" />
+            <FiUser className="w-5 h-5 text-[#2563eb]" />
             <span className="font-medium">{blog.author}</span>
           </div>
           <div className="flex items-center gap-2">
-            <FiCalendar className="w-5 h-5 text-[#78355e]" />
+            <FiCalendar className="w-5 h-5 text-[#2563eb]" />
             <span>{formatDate(blog.date)}</span>
           </div>
           <div className="flex items-center gap-2">
-            <FiClock className="w-5 h-5 text-[#78355e]" />
+            <FiClock className="w-5 h-5 text-[#2563eb]" />
             <span>{blog.readTime}</span>
           </div>
         </div>
@@ -165,13 +165,13 @@ const BlogDetailPage = () => {
             {previousBlog && (
               <Link
                 href={`/blogs/${previousBlog.slug}`}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-[#78355e] transition-all duration-300 hover:shadow-lg"
+                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-lg"
               >
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                   <FiArrowLeft className="w-4 h-4" />
                   <span>Previous Article</span>
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 group-hover:text-[#78355e] transition-colors line-clamp-2">
+                <h4 className="text-lg font-bold text-gray-800 group-hover:text-[#2563eb] transition-colors line-clamp-2">
                   {previousBlog.title}
                 </h4>
               </Link>
@@ -181,13 +181,13 @@ const BlogDetailPage = () => {
             {nextBlog && (
               <Link
                 href={`/blogs/${nextBlog.slug}`}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-[#78355e] transition-all duration-300 hover:shadow-lg md:text-right"
+                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-lg md:text-right"
               >
                 <div className="flex items-center gap-2 justify-end text-sm text-gray-500 mb-3">
                   <span>Next Article</span>
                   <FiArrowRight className="w-4 h-4" />
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 group-hover:text-[#78355e] transition-colors line-clamp-2">
+                <h4 className="text-lg font-bold text-gray-800 group-hover:text-[#2563eb] transition-colors line-clamp-2">
                   {nextBlog.title}
                 </h4>
               </Link>

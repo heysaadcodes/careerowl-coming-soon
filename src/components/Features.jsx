@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import EarlyAccessModal from './EarlyAccessModal';
+import React from 'react';
 import { 
   FiBriefcase, 
   FiUsers, 
@@ -16,7 +15,6 @@ import {
 } from 'react-icons/fi';
 
 const Features = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const employerFeatures = [
     {
       icon: FiZap,
@@ -117,7 +115,7 @@ const Features = () => {
   ];
 
   const FeatureCard = ({ icon: Icon, title, description, accentColor }) => (
-    <div className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className={`w-12 h-12 ${accentColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
         <Icon className="w-6 h-6 text-gray-800" />
       </div>
@@ -142,7 +140,7 @@ const Features = () => {
         {/* For Employers & Recruiters */}
         <div className="mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="bg-[#78355e] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
+            <div className="bg-[#2563eb] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2 shadow-lg">
               <FiBriefcase className="w-5 h-5" />
               For Employers & Recruiters
             </div>
@@ -161,7 +159,7 @@ const Features = () => {
         {/* For Applicants */}
         <div className="mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="bg-[#78355e] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
+            <div className="bg-[#2563eb] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2 shadow-lg">
               <FiUsers className="w-5 h-5" />
               For Applicants
             </div>
@@ -171,7 +169,7 @@ const Features = () => {
               <FeatureCard 
                 key={index} 
                 {...feature} 
-                accentColor="bg-[#78355e]/10"
+                accentColor="bg-[#2563eb]/10"
               />
             ))}
           </div>
@@ -180,7 +178,7 @@ const Features = () => {
         {/* For Everyone */}
         <div>
           <div className="flex items-center justify-center mb-8">
-            <div className="bg-[#78355e] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2">
+            <div className="bg-[#2563eb] text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-2 shadow-lg">
               <FiCheckCircle className="w-5 h-5" />
               For Everyone
             </div>
@@ -194,30 +192,9 @@ const Features = () => {
               />
             ))}
           </div>
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center bg-gradient-to-r from-[#78355e] to-[#9d4577] rounded-3xl p-12">
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Ready to Experience the Future of Hiring?
-          </h3>
-          <p className="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
-            Join thousands of employers and job seekers who are already waiting for our launch
-          </p>
-          <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
-            Get Early Access
-          </button>
-        </div>
+        </div>       
       </div>
-       {/* Early Access Modal */}
-      <EarlyAccessModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} />
     </div>
-   
-  
   );
 };
 

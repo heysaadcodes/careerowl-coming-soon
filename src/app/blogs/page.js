@@ -55,7 +55,7 @@ const BlogsPage = () => {
               className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
                 selectedCategory === category
                   ? 'bg-[#78355e] text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-[#2563eb]'
               }`}
             >
               {category}
@@ -76,7 +76,7 @@ const BlogsPage = () => {
               <Link
                 key={blog.id}
                 href={`/blogs/${blog.slug}`}
-                className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#78355e] transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
+                className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
               >
                 {/* Blog Image */}
                 <div className="relative h-48 bg-gradient-to-br from-[#78355e] to-[#9d4577] overflow-hidden">
@@ -107,7 +107,7 @@ const BlogsPage = () => {
                   </div>
 
                   {/* Title */}
-                  <h2 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-[#78355e] transition-colors line-clamp-2">
+                  <h2 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-[#2563eb] transition-colors line-clamp-2">
                     {blog.title}
                   </h2>
 
@@ -117,7 +117,7 @@ const BlogsPage = () => {
                   </p>
 
                   {/* Read More Link */}
-                  <div className="flex items-center gap-2 text-[#78355e] font-semibold group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-2 text-[#2563eb] font-semibold group-hover:gap-3 transition-all">
                     <span>Read More</span>
                     <FiArrowRight className="w-4 h-4" />
                   </div>

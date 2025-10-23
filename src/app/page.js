@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiTwitter, FiLinkedin, FiYoutube, FiClock, FiUser, FiArrowRight } from "react-icons/fi";
 import EarlyAccessModal from "../components/EarlyAccessModal";
 import Features from "../components/Features";
+import RecentBlogs from "../components/RecentBlogs";
+import CallToAction from "../components/CallToAction";
+
 const Page = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -35,10 +38,41 @@ const Page = () => {
   }, [launchDate]);
 
   const socialLinks = [
-    { icon: FiLinkedin, href: "https://www.linkedin.com/company/careerowl", label: "LinkedIn" },
-    { icon: FiFacebook, href: "https://www.facebook.com/careerowl.ca", label: "Facebook" },
-    { icon: FiInstagram, href: "https://www.instagram.com/careerowl.ca/", label: "Instagram" },
-    { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube" },
+    { icon: FiLinkedin, href: "https://www.linkedin.com/company/careerowl", label: "LinkedIn", color: "bg-[#78355e]" },
+    { icon: FiFacebook, href: "https://www.facebook.com/careerowl.ca", label: "Facebook", color: "bg-[#78355e]" },
+    { icon: FiInstagram, href: "https://www.instagram.com/careerowl.ca/", label: "Instagram", color: "bg-[#78355e]" },
+    { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube", color: "bg-[#78355e]" },
+  ];
+
+  // Sample blog data - replace with actual data from your blogs.json
+  const recentBlogs = [
+    {
+      id: 1,
+      title: "The Future of Remote Hiring in 2026",
+      excerpt: "Discover how remote hiring is evolving and what it means for employers and job seekers in the coming year.",
+      category: "Industry Insights",
+      author: "CareerOwl Team",
+      readTime: "5 min read",
+      slug: "future-remote-hiring-2026"
+    },
+    {
+      id: 2,
+      title: "5 Tips for Creating the Perfect Job Description",
+      excerpt: "Learn how to craft compelling job descriptions that attract top talent and set clear expectations.",
+      category: "Hiring Tips",
+      author: "CareerOwl Team",
+      readTime: "4 min read",
+      slug: "perfect-job-description-tips"
+    },
+    {
+      id: 3,
+      title: "Building Your Personal Brand as a Job Seeker",
+      excerpt: "Stand out in the competitive job market by developing a strong personal brand that showcases your unique value.",
+      category: "Career Advice",
+      author: "CareerOwl Team",
+      readTime: "6 min read",
+      slug: "building-personal-brand"
+    }
   ];
 
   return (
@@ -110,7 +144,7 @@ const Page = () => {
             ].map((item, index) => (
               <div key={item.label} className="flex items-center">
                 <div className="text-center">
-                  <div className="bg-gray-100 text-gray-800 text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold rounded-xl px-2 sm:px-3 lg:px-4 xl:px-5 py-2 sm:py-2.5 lg:py-3 xl:py-4 min-w-[50px] sm:min-w-[55px] lg:min-w-[65px] xl:min-w-[80px] 2xl:min-w-[95px] border border-gray-200 shadow-sm">
+                  <div className="bg-gray-100 text-[#2563eb] text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold rounded-xl px-2 sm:px-3 lg:px-4 xl:px-5 py-2 sm:py-2.5 lg:py-3 xl:py-4 min-w-[50px] sm:min-w-[55px] lg:min-w-[65px] xl:min-w-[80px] 2xl:min-w-[95px] border border-gray-200 shadow-sm">
                     {item.value.toString().padStart(2, '0')}
                   </div>
                   <div className="text-gray-600 text-xs sm:text-sm lg:text-base xl:text-lg mt-1.5 sm:mt-2 font-semibold">
@@ -142,7 +176,7 @@ const Page = () => {
               return (
                 <div
                   key={social.label}
-                  className="rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-gray-200 shadow-lg bg-[#78355e] p-2.5 sm:p-3 lg:p-3.5 xl:p-4 flex items-center justify-center"
+                  className={`rounded-full cursor-pointer transform hover:scale-110 transition-all duration-300 border border-gray-200 shadow-lg ${social.color} p-2.5 sm:p-3 lg:p-3.5 xl:p-4 flex items-center justify-center`}
                   onClick={() => window.open(social.href, '_blank')}
                 >
                   <IconComponent
@@ -153,7 +187,6 @@ const Page = () => {
           </div>
         </div>
       </div>
-
 
       {/* Right Side - Image Section */}
       <div className="lg:w-[55%] w-full lg:h-full h-80 sm:h-96 relative overflow-hidden">
@@ -198,7 +231,13 @@ const Page = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)} />
     </div>
+
+    {/* Features Section */}
     <Features />
+    {/* Recent Blogs Section */}
+    <RecentBlogs />
+    {/* Call To Action Section */}
+    <CallToAction />
     </>
   );
 };
