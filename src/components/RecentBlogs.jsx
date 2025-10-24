@@ -61,6 +61,7 @@ const RecentBlogs = () => {
                   {blog.title}
                 </h3>
 
+
                 {/* Excerpt */}
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
                   {blog.excerpt}
