@@ -9,10 +9,12 @@ export default function AdminPage() {
     password: ""
   });
   const [errors, setErrors] = useState({});
-  const [emails, setEmails] = useState([]);
+  const [emailSubscribers, setEmailSubscribers] = useState([]);
+  const [earlyAccessSubmissions, setEarlyAccessSubmissions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('emails'); // 'emails' or 'earlyaccess'
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +66,6 @@ export default function AdminPage() {
     }
   };
 
-  // Wrap fetchEmails in useCallback to fix the dependency issue
   const fetchEmails = useCallback(async () => {
     if (!isAdmin) return;
 
@@ -84,24 +85,94 @@ export default function AdminPage() {
       }
 
       const result = await response.json();
-      setEmails(result.data || []);
+      setEmailSubscribers(result.data || []);
     } catch (err) {
-      setError("Failed to fetch emails");
+      setError("Failed to fetch email subscribers");
       console.error("Error fetching emails:", err);
     } finally {
       setLoading(false);
     }
-  }, [isAdmin]); // Add isAdmin as dependency
+  }, [isAdmin]);
+
+  const fetchEarlyAccess = useCallback(async () => {
+    if (!isAdmin) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/early-access', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch early access submissions: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setEarlyAccessSubmissions(result.data || []);
+    } catch (err) {
+      setError("Failed to fetch early access submissions");
+      console.error("Error fetching early access:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
-    fetchEmails();
-  }, [fetchEmails]); // Now fetchEmails is properly included in dependencies
+    if (isAdmin) {
+      fetchEmails();
+      fetchEarlyAccess();
+    }
+  }, [isAdmin, fetchEmails, fetchEarlyAccess]);
 
   const handleLogout = () => {
     setIsAdmin(false);
-    setEmails([]);
+    setEmailSubscribers([]);
+    setEarlyAccessSubmissions([]);
     setFormData({ email: "", password: "" });
     setErrors({});
+    setActiveTab('emails');
+  };
+
+  const exportToCSV = (data, filename) => {
+    if (data.length === 0) {
+      alert('No data to export');
+      return;
+    }
+
+    // Get headers from first object
+    const headers = Object.keys(data[0]).filter(key => key !== '_id' && key !== '__v');
+    
+    // Create CSV content
+    let csv = headers.join(',') + '\n';
+    
+    data.forEach(row => {
+      const values = headers.map(header => {
+        const value = row[header];
+        // Handle dates
+        if (header === 'createdAt' || header === 'updatedAt') {
+          return `"${new Date(value).toLocaleString()}"`;
+        }
+        // Escape commas and quotes
+        return `"${String(value).replace(/"/g, '""')}"`;
+      });
+      csv += values.join(',') + '\n';
+    });
+
+    // Create download link
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (!isAdmin) {
@@ -169,13 +240,15 @@ export default function AdminPage() {
     );
   }
 
+  const currentData = activeTab === 'emails' ? emailSubscribers : earlyAccessSubmissions;
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h1 className="text-2xl font-bold">Email Subscribers</h1>
+              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
               <button
                 onClick={handleLogout}
                 className="mt-3 sm:mt-0 bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center"
@@ -188,6 +261,32 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* Tabs */}
+          <div className="border-b border-gray-200">
+            <nav className="flex -mb-px">
+              <button
+                onClick={() => setActiveTab('emails')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'emails'
+                    ? 'border-indigo-600 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Email Subscribers ({emailSubscribers.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('earlyaccess')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'earlyaccess'
+                    ? 'border-indigo-600 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Early Access ({earlyAccessSubmissions.length})
+              </button>
+            </nav>
+          </div>
+
           <div className="p-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 flex items-center">
@@ -198,79 +297,161 @@ export default function AdminPage() {
               </div>
             )}
 
-            <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
-                    Total subscribers
-                  </h3>
-                  <div className="mt-1 text-sm text-blue-700">
-                    <p>
-                      <span className="text-2xl font-bold">{emails.length}</span> email addresses
-                    </p>
+            <div className="mb-6 flex items-center justify-between">
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex-1 mr-4">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-blue-800">
+                      Total {activeTab === 'emails' ? 'Subscribers' : 'Submissions'}
+                    </h3>
+                    <div className="mt-1 text-sm text-blue-700">
+                      <p>
+                        <span className="text-2xl font-bold">{currentData.length}</span> entries
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <button
+                onClick={() => exportToCSV(
+                  currentData,
+                  activeTab === 'emails' ? 'email_subscribers' : 'early_access_submissions'
+                )}
+                disabled={currentData.length === 0}
+                className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Export CSV
+              </button>
             </div>
 
             {loading ? (
               <div className="flex justify-center items-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
               </div>
-            ) : emails.length > 0 ? (
+            ) : currentData.length > 0 ? (
               <div className="overflow-hidden border border-gray-200 rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Email Address
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date Subscribed
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {emails.map((email) => (
-                      <tr key={email._id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                              </svg>
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{email.email}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(email.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </td>
+                {activeTab === 'emails' ? (
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Email Address
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Date Subscribed
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {emailSubscribers.map((email) => (
+                        <tr key={email._id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                </svg>
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">{email.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {new Date(email.createdAt).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Company
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Industry
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {earlyAccessSubmissions.map((submission) => (
+                        <tr key={submission._id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">{submission.name}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {submission.company}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {submission.email}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {submission.focusIndustry}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {new Date(submission.createdAt).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             ) : (
               <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <h3 className="mt-4 text-lg font-medium text-gray-900">No subscribers yet</h3>
-                <p className="mt-1 text-gray-500">Get started by promoting your waitlist.</p>
+                <h3 className="mt-4 text-lg font-medium text-gray-900">
+                  No {activeTab === 'emails' ? 'subscribers' : 'submissions'} yet
+                </h3>
+                <p className="mt-1 text-gray-500">
+                  {activeTab === 'emails' 
+                    ? 'Get started by promoting your waitlist.' 
+                    : 'Early access submissions will appear here.'}
+                </p>
               </div>
             )}
           </div>
