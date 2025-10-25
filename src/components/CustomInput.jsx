@@ -30,7 +30,7 @@ const CustomInput = ({
           className={`w-full pl-[20px] pr-[16px] py-[16px] border rounded-lg text-[12px]  focus:outline-none transition duration-200 ${
             error
               ? "border-red-500 focus:ring-2 focus:ring-red-400"
-              : "border-gray-300 focus:ring-2 focus:ring-[#C209C1]"
+              : "border-gray-300 focus:ring-2 focus:ring-[#78355e]"
           }`}
         />
         {isPassword && (

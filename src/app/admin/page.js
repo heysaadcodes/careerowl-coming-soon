@@ -171,7 +171,7 @@ export default function AdminPage() {
             <CustomInput
               label="Email Address"
               type="email"
-              placeholder="admin@careerowl.com"
+              placeholder="user@domain.com"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -189,7 +189,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full bg-[#78355e] hover:bg-[#6a2d52] disabled:bg-[#78355e]/50 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+              className="w-full bg-[#78355e] hover:bg-[#6a2d52] disabled:bg-[#78355e]/50 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
             >
               {loginLoading ? (
                 <>
@@ -211,7 +211,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="px-6 py-5 bg-gradient-to-r from-[#78355e] to-[#bdff00] text-white">
+          <div className="px-6 py-5 bg-[#78355e] text-white">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">Career Owl Admin Dashboard</h1>

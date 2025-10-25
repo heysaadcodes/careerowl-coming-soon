@@ -9,7 +9,7 @@
       "date": "2025-10-15",
       "readTime": "8 min read",
       "category": "Transformation",
-      "image": "/blog/purpose-to-power.jpg",
+      "coverImage": "/From Purpose to Power.svg",
       "content": [
         {
           "type": "heading",
@@ -158,7 +158,7 @@
       "date": "2025-10-20",
       "readTime": "7 min read",
       "category": "Features",
-      "image": "/blog/seeds-of-change.jpg",
+      "coverImage": "/Seeds of Change.svg",
       "content": [
         {
           "type": "heading",
@@ -347,7 +347,7 @@
       "date": "2025-11-01",
       "readTime": "10 min read",
       "category": "Launch",
-      "image": "/blog/owl-taking-flight.jpg",
+      "coverImage": "/The Owl is Taking Flight Again.svg",
       "content": [
         {
           "type": "heading",
@@ -556,7 +556,7 @@
       "date": "2025-11-10",
       "readTime": "9 min read",
       "category": "Vision",
-      "image": "/blog/vision-greatness.jpg",
+      "coverImage": "/The Vision for the New CareerOwl.svg",
       "content": [
         {
           "type": "heading",

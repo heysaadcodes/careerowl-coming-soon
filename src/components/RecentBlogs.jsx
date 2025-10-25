@@ -36,9 +36,9 @@ const RecentBlogs = () => {
               <div className="relative h-48 bg-gradient-to-br from-[#78355e] to-[#9d4577] overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img
-                    src="/new-owl-logo.svg"
+                    src={blog.coverImage}
                     alt={blog.title}
-                    className="w-20 h-20 opacity-20"
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
                 <div className="absolute top-4 right-4 bg-[#bdff00] text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
@@ -60,7 +60,6 @@ const RecentBlogs = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-[#2563eb] transition-colors line-clamp-2">
                   {blog.title}
                 </h3>
-
 
                 {/* Excerpt */}
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">

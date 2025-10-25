@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -11,13 +12,51 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [eggs, setEggs] = useState([]);
+
+  // Generate eggs when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      const newEggs = Array.from({ length: 40 }, (_, i) => ({
+        id: i,
+        // Start from random positions at the top
+        initialX: Math.random() * window.innerWidth,
+        initialY: -50 - Math.random() * 100,
+        // Random properties for variety
+        size: 20 + Math.random() * 20,
+        rotation: Math.random() * 360,
+        delay: Math.random() * 4, // Stagger the falling
+        duration: 3 + Math.random() * 2,
+        // Egg color variations
+        color: getEggColor(i),
+        // Infinite animation properties
+        repeatDelay: 1 + Math.random() * 3,
+      }));
+      setEggs(newEggs);
+    }
+  }, [isOpen]);
+
+  // Egg color variations like in the HTML version
+  const getEggColor = (index) => {
+    const colors = [
+      { bg: "from-[#ffeef0] to-[#ffc1cc]", shadow: "rgba(255, 182, 193, 0.3)" },
+      { bg: "from-[#e0f7ff] to-[#93d5f5]", shadow: "rgba(147, 197, 253, 0.3)" },
+      { bg: "from-[#fffbeb] to-[#fde68a]", shadow: "rgba(253, 224, 71, 0.3)" },
+      { bg: "from-[#ecfdf5] to-[#86efac]", shadow: "rgba(134, 239, 172, 0.3)" },
+      { bg: "from-[#f5f3ff] to-[#c4b5fd]", shadow: "rgba(196, 181, 253, 0.3)" },
+      { bg: "from-[#fffbeb] to-[#fbbf24]", shadow: "rgba(251, 191, 36, 0.3)" },
+      { bg: "from-[#e0f2fe] to-[#38bdf8]", shadow: "rgba(56, 189, 248, 0.3)" },
+      { bg: "from-[#fce7f3] to-[#f9a8d4]", shadow: "rgba(249, 168, 212, 0.3)" },
+      { bg: "from-[#f0fdf4] to-[#bbf7d0]", shadow: "rgba(187, 247, 208, 0.3)" },
+    ];
+    return colors[index % colors.length];
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear error when user starts typing
     if (error) setError("");
   };
 
@@ -27,10 +66,10 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      const response = await fetch('/api/early-access', {
-        method: 'POST',
+      const response = await fetch("/api/early-access", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -38,10 +77,9 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Submission failed');
+        throw new Error(result.error || "Submission failed");
       }
 
-      // Success!
       setSuccess(true);
       setFormData({
         name: "",
@@ -50,14 +88,12 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
         focusIndustry: "",
       });
 
-      // Close modal after 2 seconds
       setTimeout(() => {
         setSuccess(false);
         onClose();
       }, 2000);
-
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -67,31 +103,154 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full transform transition-all">
+      {/* Interactive Eggs - Infinite falling from top to bottom */}
+      <div className="absolute inset-0 overflow-hidden">
+        {eggs.map((egg) => (
+          <motion.div
+            key={egg.id}
+            className="absolute cursor-grab active:cursor-grabbing"
+            drag
+            dragElastic={0.05}
+            dragMomentum={false}
+            style={{
+              width: egg.size,
+              height: egg.size * 1.3,
+            }}
+            initial={{
+              x: egg.initialX,
+              y: egg.initialY,
+              rotate: 0,
+              scale: 0.8,
+            }}
+            animate={{
+              x: egg.initialX + (Math.random() - 0.5) * 100, // Slight horizontal drift
+              y: window.innerHeight + 100,
+              rotate: 180 + Math.random() * 180,
+              scale: 1,
+            }}
+            transition={{
+              type: "tween",
+              ease: "easeInOut",
+              duration: egg.duration,
+              delay: egg.delay,
+              repeat: Infinity,
+              repeatDelay: egg.repeatDelay,
+              repeatType: "loop",
+            }}
+            whileHover={{
+              scale: 1.2,
+              rotate: egg.rotation + 15,
+              transition: { type: "spring", stiffness: 400, damping: 10 },
+            }}
+            whileTap={{ scale: 0.9 }}
+            whileDrag={{ scale: 1.1, rotate: 0 }}
+          >
+            {/* Proper Egg Shape */}
+            <div
+              className={`
+                w-full h-full rounded-[50%_50%_50%_50%_/_60%_60%_40%_40%] 
+                bg-gradient-to-br ${egg.color.bg}
+                border border-white/40
+                shadow-lg relative
+              `}
+              style={{
+                boxShadow: `
+                  0 6px 16px ${egg.color.shadow},
+                  inset 0 -2px 6px rgba(0, 0, 0, 0.08),
+                  inset 0 2px 6px rgba(255, 255, 255, 0.6)
+                `,
+              }}
+            >
+              {/* Egg shine effect */}
+              <div
+                className="absolute top-[18%] left-[22%] bg-white/70 rounded-full transform -rotate-25 blur-[0.5px]"
+                style={{
+                  width: `${egg.size * 0.35}px`,
+                  height: `${egg.size * 0.2}px`,
+                }}
+              ></div>
+
+              {/* Subtle yolk effect */}
+              <div
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-yellow-200/25 to-orange-200/25 rounded-full opacity-30"
+                style={{
+                  width: `${egg.size * 0.5}px`,
+                  height: `${egg.size * 0.5}px`,
+                }}
+              ></div>
+
+              {/* Very subtle crack details */}
+              <div className="absolute top-1/3 left-1/4 w-1/2 h-0.5 bg-gray-300/15 transform -rotate-12"></div>
+              <div className="absolute top-2/3 left-1/4 w-1/2 h-0.5 bg-gray-300/15 transform rotate-12"></div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Modal Content - Always visible */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 25,
+          delay: 0.3,
+        }}
+        className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative z-10 border border-gray-100 backdrop-blur-sm"
+      >
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">
-            Get Early Access
-          </h2>
-          <p className="text-gray-700 mb-6">
-            Be the first to experience our new platform.
-          </p>
+          <div className="text-center mb-2">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Get Early Access
+            </h2>
+            <p className="text-gray-600 mt-1">
+              Be the first to experience our new platform.
+            </p>
+          </div>
 
           {success ? (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
               Successfully registered! Thank you.
-            </div>
+            </motion.div>
           ) : (
             <>
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-2"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   {error}
-                </div>
+                </motion.div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -187,9 +346,25 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                   >
                     {loading ? (
                       <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
                         </svg>
                         Submitting...
                       </>
@@ -202,7 +377,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
             </>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
