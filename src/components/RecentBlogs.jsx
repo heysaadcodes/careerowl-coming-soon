@@ -16,7 +16,7 @@ const RecentBlogs = () => {
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-gray-800 mb-4">
             Latest from <br />
-            <span className="text-[#78355e]">CareerOwl</span>
+            <span className="text-[#78355e]">CareerOwl&trade;</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Insights, tips, and updates about the future of hiring and career

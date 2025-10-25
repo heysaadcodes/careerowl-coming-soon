@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FiClock, FiUser, FiTag, FiArrowRight, FiSearch, FiArrowLeft, FiArrowLeftCircle } from 'react-icons/fi';
 import blogsData from '@/data/blogs.json';
 import CallToAction from '@/components/CallToAction';
+import Image from 'next/image';
 
 const BlogsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,7 +33,7 @@ const BlogsPage = () => {
         </div>
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
-            CareerOwl Blog
+            CareerOwl&trade; Blog
           </h1>
           <p className="text-white/90 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
             Insights, updates, and stories about the future of hiring
@@ -87,9 +88,11 @@ const BlogsPage = () => {
                 {/* Blog Image */}
                 <div className="relative h-48 bg-gradient-to-br from-[#78355e] to-[#9d4577] overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <img
-                      src={blog.coverImage}
+                    <Image
+                      src={blog.image}
                       alt={blog.title}
+                      width={500}
+                      height={300}
                       className="w-full h-full object-cover object-center"
                     />
                   </div>

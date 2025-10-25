@@ -45,37 +45,6 @@ const Page = () => {
     { icon: FiYoutube, href: "https://www.youtube.com/@careerowl-ca", label: "YouTube", color: "bg-[#78355e]" },
   ];
 
-  // Sample blog data - replace with actual data from your blogs.json
-  const recentBlogs = [
-    {
-      id: 1,
-      title: "The Future of Remote Hiring in 2026",
-      excerpt: "Discover how remote hiring is evolving and what it means for employers and job seekers in the coming year.",
-      category: "Industry Insights",
-      author: "CareerOwl Team",
-      readTime: "5 min read",
-      slug: "future-remote-hiring-2026"
-    },
-    {
-      id: 2,
-      title: "5 Tips for Creating the Perfect Job Description",
-      excerpt: "Learn how to craft compelling job descriptions that attract top talent and set clear expectations.",
-      category: "Hiring Tips",
-      author: "CareerOwl Team",
-      readTime: "4 min read",
-      slug: "perfect-job-description-tips"
-    },
-    {
-      id: 3,
-      title: "Building Your Personal Brand as a Job Seeker",
-      excerpt: "Stand out in the competitive job market by developing a strong personal brand that showcases your unique value.",
-      category: "Career Advice",
-      author: "CareerOwl Team",
-      readTime: "6 min read",
-      slug: "building-personal-brand"
-    }
-  ];
-
   return (
     <>
       <div className="w-full min-h-screen lg:h-screen flex lg:flex-row flex-col-reverse relative lg:overflow-hidden">

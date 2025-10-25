@@ -2,9 +2,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { FiClock, FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowLeftCircle } from 'react-icons/fi';
+import { FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowLeftCircle } from 'react-icons/fi';
 import blogsData from '@/data/blogs.json';
 import CallToAction from '@/components/CallToAction';
+import Image from 'next/image';
 
 const BlogDetailPage = () => {
   const params = useParams();
@@ -77,10 +78,12 @@ const BlogDetailPage = () => {
         {/* Featured Image/Banner */}
         <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-[#78355e] to-[#9d4577] rounded-2xl overflow-hidden mb-12 shadow-xl">
           <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src="/new-owl-logo.svg"
+            <Image
+              src={blog.image}
               alt={blog.title}
-              className="w-32 h-32 opacity-20"
+              className="w-full h-full object-cover object-center"
+              width={1024}
+              height={786}
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
@@ -130,7 +133,7 @@ const BlogDetailPage = () => {
               Enjoyed this article?
             </h3>
             <p className="text-gray-600 mb-6">
-              Share it with your network or explore more insights from CareerOwl
+              Share it with your network or explore more insights from CareerOwl&trade;.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
@@ -139,12 +142,6 @@ const BlogDetailPage = () => {
               >
                 Read More Articles
               </Link>
-              {/* <Link
-                href="/"
-                className="bg-[#bdff00] hover:bg-[#a8e600] text-gray-900 font-bold px-6 py-3 rounded-full transition-all duration-300"
-              >
-                Get Early Access
-              </Link> */}
             </div>
           </div>
         </div>
