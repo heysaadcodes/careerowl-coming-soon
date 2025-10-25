@@ -1,15 +1,15 @@
 import "./globals.css";
+import { metadata } from "./metadata";
+import Analytics from "@/components/Analytics";
 
-export const metadata = {
-  title: "CareerOwl - Coming Soon",
-  description: "Stay tuned for something amazing!",
-};
+export { metadata }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );

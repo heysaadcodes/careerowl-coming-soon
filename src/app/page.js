@@ -6,6 +6,7 @@ import Features from "../components/Features";
 import RecentBlogs from "../components/RecentBlogs";
 import CallToAction from "../components/CallToAction";
 import Image from "next/image";
+import Link from "next/link";
 
 const Page = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -53,7 +54,7 @@ const Page = () => {
           <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
 
             {/* Logo Evolution Section */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-4">
               <div className="flex justify-center items-center gap-4 sm:gap-6 lg:gap-7 xl:gap-8 mb-3 sm:mb-4 lg:mb-5">
                 {/* Old Logo */}
                 <div className="text-center flex-shrink-0">
@@ -93,9 +94,9 @@ const Page = () => {
                 </div>
               </div>
 
-              <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl max-w-md lg:max-w-lg mx-auto leading-relaxed px-2">
+              <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl max-w-md lg:max-w-lg mx-auto px-2">
                 We're evolving to serve you better! Our new identity reflects our commitment to
-                innovative career solutions and growth.
+                innovative career solutions and growth. In the mean while <br /><Link href="/playful" className="text-[#78355e] font-semibold underline">Play in the Owl's Nest</Link>.
               </p>
             </div>
 
