@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Turnstile from "./Turnstile";
 
 const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [eggs, setEggs] = useState([]);
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   // Generate eggs when modal opens
   useEffect(() => {
@@ -65,7 +67,27 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
     setLoading(true);
     setError("");
 
+    if (!turnstileToken) {
+      setError("Please complete the security verification");
+      setLoading(false);
+      return;
+    }
+
     try {
+      const verifyResponse = await fetch("/api/verify-turnstile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: turnstileToken }),
+      });
+
+      const verifyResult = await verifyResponse.json();
+
+      if (!verifyResponse.ok || !verifyResult.success) {
+        throw new Error("Security verification failed");
+      }
+
       const response = await fetch("/api/early-access", {
         method: "POST",
         headers: {
@@ -97,6 +119,21 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTurnstileVerify = (token) => {
+    setTurnstileToken(token);
+    setError(""); // Clear any previous errors
+  };
+
+  const handleTurnstileError = () => {
+    setError("Security verification failed. Please try again.");
+    setTurnstileToken("");
+  };
+
+  const handleTurnstileExpire = () => {
+    setTurnstileToken("");
+    setError("Security check expired. Please verify again.");
   };
 
   if (!isOpen) return null;
@@ -327,6 +364,16 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
                     placeholder="Enter your focus industry"
                     required
+                  />
+                </div>
+
+                <div className="py-3">
+                  <Turnstile
+                    onVerify={handleTurnstileVerify}
+                    onError={handleTurnstileError}
+                    onExpire={handleTurnstileExpire}
+                    theme="light"
+                    size="normal"
                   />
                 </div>
 
