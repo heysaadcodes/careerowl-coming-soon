@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import "./globals.css";
 import { metadata } from "./metadata";
 import Analytics from "@/components/Analytics";
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
         {children}
         <GoogleTagManager />
         <Analytics />
+        <Footer />
       </body>
     </html>
   );

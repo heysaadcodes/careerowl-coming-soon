@@ -24,13 +24,17 @@ const BlogsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#78355e] to-[#9d4577] py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-2 text-white hover:text-gray-200 font-semibold transition-colors">
-            <FiArrowLeftCircle className="w-6 h-6" />
-            <span>Home</span>
-          </Link>
-        </div>
+
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-black hover:text-gray-800 font-semibold transition-colors">
+          <FiArrowLeftCircle className="w-6 h-6" />
+          <span className='hidden lg:block'>Home</span>
+        </Link>
+        <Image src="/careerowl-logo-hor.svg" alt="The Career Owl" width={150} height={30} className="h-8 w-auto" priority />
+
+        <div></div>
+      </div>
+      <div className="bg-gradient-to-r from-[#78355e] to-[#9d4577] py-10 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
             CareerOwl&trade; Blog

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FiInstagram, FiFacebook, FiLinkedin, FiYoutube } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiLinkedin, FiYoutube, FiArrowRight } from "react-icons/fi";
 import EarlyAccessModal from "../components/EarlyAccessModal";
 import Features from "../components/Features";
 import RecentBlogs from "../components/RecentBlogs";
@@ -61,7 +61,7 @@ const Page = () => {
                   <div className="bg-gray-100 rounded-2xl p-3 sm:p-4 lg:p-4 xl:p-5 border border-gray-200 shadow-sm mb-2 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 flex items-center justify-center">
                     <img
                       src="/old-owl-logo.png"
-                      alt="Old Career Owl Logo"
+                      alt="Old CareerOwl Logo"
                       className="mx-auto object-contain w-full h-full" />
                   </div>
                   <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Then</span>
@@ -70,14 +70,7 @@ const Page = () => {
                 {/* Evolution Arrow */}
                 <div className="flex flex-col items-center justify-center flex-shrink-0">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 bg-[#bdff00] rounded-full flex items-center justify-center mb-1">
-                    <svg
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-gray-800 transform rotate-45"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    <FiArrowRight className="text-gray-900 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7" />
                   </div>
                   <span className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-700 font-bold block">Evolving</span>
                 </div>
@@ -87,7 +80,7 @@ const Page = () => {
                   <div className="bg-gray-100 rounded-2xl p-3 sm:p-4 lg:p-4 xl:p-5 border border-gray-200 shadow-sm mb-2 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 flex items-center justify-center">
                     <img
                       src="/new-owl-logo.svg"
-                      alt="New Career Owl Logo"
+                      alt="New CareerOwl Logo"
                       className="mx-auto object-contain w-full h-full" />
                   </div>
                   <span className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-800 font-bold block">Now</span>
@@ -162,12 +155,12 @@ const Page = () => {
         {/* Right Side - Image Section */}
         <div className="lg:w-[55%] w-full lg:h-full h-80 sm:h-96 relative overflow-hidden">
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-bl from-transparent via-transparent to-white/10 z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-tl lg:bg-gradient-to-bl from-transparent lg:via-transparent to-black z-10"></div>
 
           {/* Background Image */}
           <img
             src="/owl-bg.jpeg"
-            alt="Career Owl Background"
+            alt="CareerOwl Background"
             className="absolute inset-0 w-full h-full object-cover lg:object-right-bottom" />
 
           {/* Curved SVG - Only show on desktop */}
@@ -184,12 +177,12 @@ const Page = () => {
           </div>
 
           <Image
-            src="/new-owl-logo.svg"
+            src="/owl-white-logo.svg"
             alt="Owl"
             width={250}
             height={250}
             objectFit="cover"
-            className="absolute lg:w-[150px] lg:h-[150px] w-[100px] h-[100px] lg:hidden block top-0 left-2"
+            className="absolute w-[150px] h-[150px] lg:hidden block top-0 left-2 z-20"
           />
 
           <Image

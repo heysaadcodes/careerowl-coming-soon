@@ -18,7 +18,7 @@ const sendEmail = async (emailOptions) => {
     const resend = createResendClient();
 
     const { data, error } = await resend.emails.send({
-      from: emailOptions.from || 'Career Owl <noreply@thecareerowl.ca>',
+      from: emailOptions.from || 'CareerOwl <noreply@thecareerowl.ca>',
       to: emailOptions.to,
       subject: emailOptions.subject,
       html: emailOptions.html,
@@ -43,7 +43,7 @@ const sendEmail = async (emailOptions) => {
 // Send welcome email to user
 const sendWelcomeEmail = async (userEmail) => {
   const emailOptions = {
-    from: 'Career Owl <noreply@thecareerowl.ca>',
+    from: 'CareerOwl <noreply@thecareerowl.ca>',
     to: userEmail,
     subject: "Welcome to Our Waitlist! 🎉",
     html: `
@@ -87,11 +87,11 @@ const sendWelcomeEmail = async (userEmail) => {
             
             <p>Stay tuned for updates!</p>
 
-            <p>Best regards,<br><strong>The Career Owl Team</strong></p>
+            <p>Best regards,<br><strong>The CareerOwl Team</strong></p>
           </div>
           <div class="footer">
             <p>This email was sent to ${userEmail}</p>
-            <p>&copy; 2024 Career Owl. All rights reserved.</p>
+            <p>&copy; 2024 CareerOwl. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -114,7 +114,7 @@ const sendWelcomeEmail = async (userEmail) => {
       Stay tuned for updates!
       
       Best regards,
-      The Career Owl Team
+      The CareerOwl Team
     `
   };
 
@@ -127,7 +127,7 @@ const sendNotificationEmail = async (userEmail, totalCount) => {
   const adminEmail = process.env.NOTIFICATION_EMAIL || 'abdullah.k10204@gmail.com';
 
   const emailOptions = {
-    from: 'Career Owl <noreply@thecareerowl.ca>',
+    from: 'CareerOwl <noreply@thecareerowl.ca>',
     to: adminEmail,
     subject: `🔔 New Waitlist Signup - ${userEmail}`,
     html: `

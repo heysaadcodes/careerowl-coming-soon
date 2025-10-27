@@ -1,14 +1,14 @@
 // app/metadata.js
 export const metadata = {
     title: {
-        default: 'Career Owl - AI-Powered Career Platform Launching Soon',
-        template: '%s | Career Owl'
+        default: 'CareerOwl - Wise Choices, Bright Careers | Canada\'s leading recruitment tool for Job Seekers, Employers and Recruiters',
+        template: '%s | CareerOwl'
     },
-    description: 'Career Owl is launching soon! Get early access to our innovative AI-powered career development platform. Transform your professional journey with smart career guidance.',
+    description: 'CareerOwl is launching soon! Get early access to our innovative AI-powered career development platform. Transform your professional journey with smart career guidance.',
     keywords: 'career development, AI career platform, job search, professional growth, career guidance, early access, launching soon',
-    authors: [{ name: 'Career Owl Team' }],
-    creator: 'Career Owl',
-    publisher: 'Career Owl',
+    authors: [{ name: 'CareerOwl Team' }],
+    creator: 'CareerOwl',
+    publisher: 'CareerOwl',
     formatDetection: {
         email: false,
         address: false,
@@ -19,16 +19,16 @@ export const metadata = {
         canonical: '/',
     },
     openGraph: {
-        title: 'Career Owl - AI-Powered Career Platform Launching Soon',
+        title: 'CareerOwl - Wise Choices, Bright Careers | Canada\'s leading recruitment tool for Job Seekers, Employers and Recruiters',
         description: 'Get early access to our innovative AI-powered career development platform. Transform your professional journey.',
         url: 'https://thecareerowl.ca',
-        siteName: 'Career Owl',
+        siteName: 'CareerOwl',
         images: [
             {
                 url: '/og-image.jpg', // You'll need to create this
                 width: 1200,
                 height: 630,
-                alt: 'Career Owl - Launching Soon',
+                alt: 'CareerOwl - Launching Soon',
             },
         ],
         locale: 'en_CA',
@@ -36,7 +36,7 @@ export const metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Career Owl - AI-Powered Career Platform Launching Soon',
+        title: 'CareerOwl - Wise Choices, Bright Careers | Canada\'s leading recruitment tool for Job Seekers, Employers and Recruiters',
         description: 'Get early access to our innovative AI-powered career development platform.',
         images: ['/og-image.jpg'],
         creator: '@careerowl',

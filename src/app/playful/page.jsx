@@ -13,7 +13,7 @@ export default function PlayfulAnimation() {
   const [hootCount, setHootCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Career Owl Colors
+  // CareerOwl Colors
   const colors = {
     primary: "#78355e",
     secondary: "#bdff00",
@@ -355,7 +355,7 @@ export default function PlayfulAnimation() {
         {/* Bottom Info */}
         <div className="info-section flex-shrink-0 pb-8 lg:pb-12 text-center">
           <h1 className="text-2xl lg:text-4xl font-black text-white mb-2 animate-bounce-slow">
-            Career Owl
+            CareerOwl
           </h1>
           <p className="text-lg lg:text-xl text-gray-300 animate-pulse">
             Hatching Soon 🦉
