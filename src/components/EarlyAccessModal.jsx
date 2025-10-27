@@ -15,8 +15,9 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [success, setSuccess] = useState(false);
   const [eggs, setEggs] = useState([]);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileKey, setTurnstileKey] = useState(0); // Add key to force reset
 
-  // Generate eggs when modal opens
+  // Reset everything when modal opens
   useEffect(() => {
     if (isOpen) {
       const newEggs = Array.from({ length: 40 }, (_, i) => ({
@@ -35,8 +36,26 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
         repeatDelay: 1 + Math.random() * 3,
       }));
       setEggs(newEggs);
+
+      // Reset form and Turnstile when modal opens
+      resetFormAndTurnstile();
     }
   }, [isOpen]);
+
+  // Reset form and Turnstile function
+  const resetFormAndTurnstile = () => {
+    setFormData({
+      name: "",
+      company: "",
+      email: "",
+      focusIndustry: "",
+    });
+    setTurnstileToken("");
+    setError("");
+    setSuccess(false);
+    // Increment key to force Turnstile remount
+    setTurnstileKey((prev) => prev + 1);
+  };
 
   // Egg color variations like in the HTML version
   const getEggColor = (index) => {
@@ -109,13 +128,19 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
         email: "",
         focusIndustry: "",
       });
+      setTurnstileToken(""); // Clear token after successful submission
 
       setTimeout(() => {
         setSuccess(false);
         onClose();
+        // Reset Turnstile when closing
+        setTurnstileKey((prev) => prev + 1);
       }, 2000);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
+      // Reset Turnstile on error so user can try again
+      setTurnstileToken("");
+      setTurnstileKey((prev) => prev + 1);
     } finally {
       setLoading(false);
     }
@@ -129,11 +154,22 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
   const handleTurnstileError = () => {
     setError("Security verification failed. Please try again.");
     setTurnstileToken("");
+    // Reset Turnstile on error
+    setTurnstileKey((prev) => prev + 1);
   };
 
   const handleTurnstileExpire = () => {
     setTurnstileToken("");
     setError("Security check expired. Please verify again.");
+    // Reset Turnstile on expire
+    setTurnstileKey((prev) => prev + 1);
+  };
+
+  // Add a function to manually reset Turnstile
+  const resetTurnstile = () => {
+    setTurnstileToken("");
+    setTurnstileKey((prev) => prev + 1);
+    setError("");
   };
 
   if (!isOpen) return null;
@@ -272,21 +308,31 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center"
+                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center justify-between"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {error}
+                  <div className="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {error}
+                  </div>
+                  {error.includes("verification") && (
+                    <button
+                      onClick={resetTurnstile}
+                      className="ml-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded"
+                    >
+                      Retry
+                    </button>
+                  )}
                 </motion.div>
               )}
 
@@ -369,6 +415,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
                 <div className="py-3">
                   <Turnstile
+                    key={turnstileKey} // This forces re-render when key changes
                     onVerify={handleTurnstileVerify}
                     onError={handleTurnstileError}
                     onExpire={handleTurnstileExpire}
@@ -380,7 +427,10 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 <div className="flex gap-3 pt-4">
                   <button
                     type="button"
-                    onClick={onClose}
+                    onClick={() => {
+                      onClose();
+                      resetFormAndTurnstile();
+                    }}
                     disabled={loading}
                     className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer rounded-full disabled:opacity-50"
                   >
@@ -388,7 +438,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !turnstileToken}
                     className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer rounded-full disabled:opacity-50 flex items-center justify-center"
                   >
                     {loading ? (

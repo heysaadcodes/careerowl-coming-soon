@@ -83,7 +83,6 @@ const Turnstile = ({
         theme: theme,
         size: size,
         callback: (token) => {
-          console.log("Turnstile verified with token:", token);
           if (onVerify) onVerify(token);
         },
         "error-callback": () => {
