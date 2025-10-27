@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Turnstile from "./Turnstile";
 
 const EarlyAccessModal = ({ isOpen, onClose }) => {
@@ -15,42 +15,47 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [success, setSuccess] = useState(false);
   const [eggs, setEggs] = useState([]);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [timeLeft, setTimeLeft] = useState(10);
 
   // Generate eggs when modal opens
   useEffect(() => {
     if (isOpen) {
       const newEggs = Array.from({ length: 40 }, (_, i) => ({
         id: i,
-        // Start from random positions at the top
         initialX: Math.random() * window.innerWidth,
         initialY: -50 - Math.random() * 100,
-        // Random properties for variety
         size: 20 + Math.random() * 20,
         rotation: Math.random() * 360,
-        delay: Math.random() * 4, // Stagger the falling
+        delay: Math.random() * 4,
         duration: 3 + Math.random() * 2,
-        // Egg color variations
         color: getEggColor(i),
-        // Infinite animation properties
         repeatDelay: 1 + Math.random() * 3,
       }));
       setEggs(newEggs);
     }
   }, [isOpen]);
 
-  // Auto-close success message after 10 seconds
+  // Auto-close success message with countdown
   useEffect(() => {
+    let timer;
     if (success) {
-      const timer = setTimeout(() => {
-        setSuccess(false);
-        onClose();
-      }, 10000); // 10 seconds
-
-      return () => clearTimeout(timer);
+      setTimeLeft(10);
+      timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            handleCloseSuccess();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
-  }, [success, onClose]);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [success]);
 
-  // Egg color variations like in the HTML version
   const getEggColor = (index) => {
     const colors = [
       { bg: "from-[#ffeef0] to-[#ffc1cc]", shadow: "rgba(255, 182, 193, 0.3)" },
@@ -130,7 +135,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
   const handleTurnstileVerify = (token) => {
     setTurnstileToken(token);
-    setError(""); // Clear any previous errors
+    setError("");
   };
 
   const handleTurnstileError = () => {
@@ -145,6 +150,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
   const handleCloseSuccess = () => {
     setSuccess(false);
+    setTimeLeft(10);
     onClose();
   };
 
@@ -152,7 +158,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      {/* Interactive Eggs - Infinite falling from top to bottom */}
+      {/* Interactive Eggs */}
       <div className="absolute inset-0 overflow-hidden">
         {eggs.map((egg) => (
           <motion.div
@@ -172,7 +178,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
               scale: 0.8,
             }}
             animate={{
-              x: egg.initialX + (Math.random() - 0.5) * 100, // Slight horizontal drift
+              x: egg.initialX + (Math.random() - 0.5) * 100,
               y: window.innerHeight + 100,
               rotate: 180 + Math.random() * 180,
               scale: 1,
@@ -194,7 +200,6 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
             whileTap={{ scale: 0.9 }}
             whileDrag={{ scale: 1.1, rotate: 0 }}
           >
-            {/* Proper Egg Shape */}
             <div
               className={`
                 w-full h-full rounded-[50%_50%_50%_50%_/_60%_60%_40%_40%] 
@@ -210,7 +215,6 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                 `,
               }}
             >
-              {/* Egg shine effect */}
               <div
                 className="absolute top-[18%] left-[22%] bg-white/70 rounded-full transform -rotate-25 blur-[0.5px]"
                 style={{
@@ -218,8 +222,6 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                   height: `${egg.size * 0.2}px`,
                 }}
               ></div>
-
-              {/* Subtle yolk effect */}
               <div
                 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-yellow-200/25 to-orange-200/25 rounded-full opacity-30"
                 style={{
@@ -227,8 +229,6 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
                   height: `${egg.size * 0.5}px`,
                 }}
               ></div>
-
-              {/* Very subtle crack details */}
               <div className="absolute top-1/3 left-1/4 w-1/2 h-0.5 bg-gray-300/15 transform -rotate-12"></div>
               <div className="absolute top-2/3 left-1/4 w-1/2 h-0.5 bg-gray-300/15 transform rotate-12"></div>
             </div>
@@ -236,7 +236,7 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
         ))}
       </div>
 
-      {/* Modal Content - Always visible */}
+      {/* Modal Content */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -258,218 +258,264 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
             </p>
           </div>
 
-          {success ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 relative"
-            >
-              {/* Close Button */}
-              <button
-                onClick={handleCloseSuccess}
-                className="absolute top-3 right-3 text-green-600 hover:text-green-800 transition-colors"
-                aria-label="Close success message"
+          <AnimatePresence mode="wait">
+            {success ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6 mb-4 relative overflow-hidden"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
+                {/* Background Pattern */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-green-200/10 rounded-full -translate-y-12 translate-x-12"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-green-300/10 rounded-full translate-y-8 -translate-x-8"></div>
 
-              {/* Success Content */}
-              <div className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-green-600 mr-3 flex-shrink-0 mt-0.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="text-left">
-                  <h3 className="text-green-800 font-semibold text-lg mb-1">
-                    Thank You for Your Interest!
-                  </h3>
-                  <p className="text-green-700 text-sm">
-                    Thanks for submitting your details. You have been added to
-                    the list of early access participants, and will be contacted
-                    by email closer to the time of our launch.
-                  </p>
-                  <div className="mt-2 text-green-600 text-xs">
-                    <p>This message will auto-close in 10 seconds</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : (
-            <>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center"
+                {/* Close Button */}
+                <button
+                  onClick={handleCloseSuccess}
+                  className="absolute top-4 right-4 text-green-600 hover:text-green-800 transition-colors bg-white/80 hover:bg-white rounded-full p-1 shadow-sm"
+                  aria-label="Close success message"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2"
+                    className="h-5 w-5"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                       clipRule="evenodd"
                     />
                   </svg>
-                  {error}
-                </motion.div>
-              )}
+                </button>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-semibold text-gray-900 mb-1"
-                  >
-                    Full Name <span className="text-red-500 mr-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
+                {/* Success Content */}
+                <div className="relative z-10">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    {/* Animated Checkmark */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        delay: 0.2,
+                      }}
+                      className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center"
+                    >
+                      <motion.svg
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-8 w-8 text-green-600"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </motion.svg>
+                    </motion.div>
 
-                <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-sm font-semibold text-gray-900 mb-1"
-                  >
-                    Company Name <span className="text-red-500 mr-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
-                    placeholder="Enter your company name"
-                    required
-                  />
-                </div>
+                    {/* Text Content */}
+                    <div className="space-y-3">
+                      <h3 className="text-green-800 font-bold text-xl">
+                        You're on the List!
+                      </h3>
+                      <p className="text-green-700 leading-relaxed">
+                        Thanks for submitting your details. You have been added
+                        to the list of early access participants, and will be
+                        contacted by email closer to the time of our launch.
+                      </p>
+                    </div>
 
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-semibold text-gray-900 mb-1"
-                  >
-                    Email Address <span className="text-red-500 mr-1">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
+                    {/* Countdown Timer */}
+                    <div className="flex items-center space-x-2 bg-green-100/50 rounded-full px-4 py-2">
+                      <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                      <span className="text-green-700 text-sm font-medium">
+                        Closing in {timeLeft} seconds
+                      </span>
+                    </div>
 
-                <div>
-                  <label
-                    htmlFor="focusIndustry"
-                    className="block text-sm font-semibold text-gray-900 mb-1"
-                  >
-                    Focus Industry <span className="text-red-500 mr-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="focusIndustry"
-                    name="focusIndustry"
-                    value={formData.focusIndustry}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
-                    placeholder="Enter your focus industry"
-                    required
-                  />
+                    {/* Close Button */}
+                    <button
+                      onClick={handleCloseSuccess}
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold transition-colors shadow-sm"
+                    >
+                      Got it, thanks!
+                    </button>
+                  </div>
                 </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {error}
+                  </motion.div>
+                )}
 
-                <div className="py-3">
-                  <Turnstile
-                    onVerify={handleTurnstileVerify}
-                    onError={handleTurnstileError}
-                    onExpire={handleTurnstileExpire}
-                    theme="light"
-                    size="normal"
-                  />
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-semibold text-gray-900 mb-1"
+                    >
+                      Full Name <span className="text-red-500 mr-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                      placeholder="Enter your full name"
+                      required
+                    />
+                  </div>
 
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    disabled={loading}
-                    className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer rounded-full disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer rounded-full disabled:opacity-50 flex items-center justify-center"
-                  >
-                    {loading ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Submitting...
-                      </>
-                    ) : (
-                      "Submit"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </>
-          )}
+                  <div>
+                    <label
+                      htmlFor="company"
+                      className="block text-sm font-semibold text-gray-900 mb-1"
+                    >
+                      Company Name <span className="text-red-500 mr-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                      placeholder="Enter your company name"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-semibold text-gray-900 mb-1"
+                    >
+                      Email Address <span className="text-red-500 mr-1">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="focusIndustry"
+                      className="block text-sm font-semibold text-gray-900 mb-1"
+                    >
+                      Focus Industry{" "}
+                      <span className="text-red-500 mr-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="focusIndustry"
+                      name="focusIndustry"
+                      value={formData.focusIndustry}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-[#78355e] focus:border-transparent transition-all"
+                      placeholder="Enter your focus industry"
+                      required
+                    />
+                  </div>
+
+                  <div className="py-3">
+                    <Turnstile
+                      onVerify={handleTurnstileVerify}
+                      onError={handleTurnstileError}
+                      onExpire={handleTurnstileExpire}
+                      theme="light"
+                      size="normal"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      disabled={loading}
+                      className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-800 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer rounded-full disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 px-6 py-3 bg-[#bdff00] text-gray-900 font-semibold hover:bg-[#a8e600] transition-all shadow-sm cursor-pointer rounded-full disabled:opacity-50 flex items-center justify-center"
+                    >
+                      {loading ? (
+                        <>
+                          <svg
+                            className="animate-spin -ml-1 mr-2 h-4 w-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Submitting...
+                        </>
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </div>
