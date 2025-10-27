@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-// Global flag to track if Turnstile is already loaded
 let turnstileLoaded = false;
 
 const Turnstile = ({
@@ -16,8 +15,16 @@ const Turnstile = ({
   const widgetIdRef = useRef(null);
   const [mounted, setMounted] = useState(false);
 
+  // Get sitekey from environment variables
+  const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
   useEffect(() => {
     setMounted(true);
+
+    if (!sitekey) {
+      console.error("Turnstile sitekey is missing");
+      return;
+    }
 
     // Only load Turnstile if it hasn't been loaded already
     if (!turnstileLoaded && window.turnstile === undefined) {
@@ -29,6 +36,10 @@ const Turnstile = ({
         turnstileLoaded = true;
         if (onLoad) onLoad();
         renderTurnstile();
+      };
+      script.onerror = (error) => {
+        console.error("Failed to load Turnstile script:", error);
+        if (onError) onError();
       };
       document.head.appendChild(script);
     } else if (window.turnstile) {
@@ -49,7 +60,12 @@ const Turnstile = ({
   }, []);
 
   const renderTurnstile = () => {
-    if (!containerRef.current || !window.turnstile) return;
+    if (!containerRef.current || !window.turnstile || !sitekey) {
+      console.error(
+        "Cannot render Turnstile: missing container, library, or sitekey"
+      );
+      return;
+    }
 
     // Remove any existing turnstile instance
     if (widgetIdRef.current) {
@@ -60,27 +76,43 @@ const Turnstile = ({
       }
     }
 
-    // Render new instance
-    widgetIdRef.current = window.turnstile.render(containerRef.current, {
-      sitekey: "YOUR_SITE_KEY", // Make sure to use your actual site key
-      theme: theme,
-      size: size,
-      callback: (token) => {
-        if (onVerify) onVerify(token);
-      },
-      "error-callback": () => {
-        if (onError) onError();
-      },
-      "expired-callback": () => {
-        if (onExpire) onExpire();
-      },
-    });
+    try {
+      // Render new instance
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: sitekey, // Use environment variable
+        theme: theme,
+        size: size,
+        callback: (token) => {
+          console.log("Turnstile verified with token:", token);
+          if (onVerify) onVerify(token);
+        },
+        "error-callback": () => {
+          console.error("Turnstile error occurred");
+          if (onError) onError();
+        },
+        "expired-callback": () => {
+          console.log("Turnstile token expired");
+          if (onExpire) onExpire();
+        },
+      });
+    } catch (error) {
+      console.error("Error rendering Turnstile:", error);
+      if (onError) onError();
+    }
   };
 
   if (!mounted) {
     return (
       <div className="flex justify-center items-center h-16">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (!sitekey) {
+    return (
+      <div className="text-center text-red-500 p-4 border border-red-300 rounded">
+        Turnstile configuration error: Missing site key
       </div>
     );
   }
