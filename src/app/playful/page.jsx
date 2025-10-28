@@ -1,5 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { FiArrowLeftCircle } from "react-icons/fi";
+import Image from "next/image";
 
 export default function PlayfulAnimation() {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,6 +15,7 @@ export default function PlayfulAnimation() {
   const [popupMessage, setPopupMessage] = useState("");
   const [hootCount, setHootCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [usedQuipIndices, setUsedQuipIndices] = useState(new Set());
 
   // CareerOwl Colors
   const colors = {
@@ -28,9 +32,55 @@ export default function PlayfulAnimation() {
     },
   };
 
+  // Owl‑centric quips. Placeholders {days}/{date} expand at render.
+  const quips = [
+    "Parliament in session. Hoot back {date}",
+    "Do Not Disturb: night shift hero on duty",
+    "Practising silent flight. Results in ~{days} days",
+    "Beak busy. Try again {date}",
+    "Logging pellets… privacy please",
+    "Talons off my calendar until {date}",
+    "Currently owl‑offline (nest mode)",
+    "Scheduling hoots: ETA {days} days",
+    "If I'm not hooting, I'm brooding",
+    "No mice, no meetings",
+    "Eyes wide shut. Power‑perch engaged",
+    "This egg is under owl‑thority",
+    "Certified nocturnal. Available after dusk",
+    "Wing updates installing… {days} days remaining",
+    "Training for the Parliament talent show",
+    "Feather forecast: 100% fluffy by {date}",
+    "Do Not Perch‑turb",
+    "Hoo's there? Not you (until {date})",
+    "On a branch call. Call back later",
+    "Buffering hoot… 0% → 100% by {date}",
+    "Quiet flight zone. Violators get side‑eye",
+    "Incubation nation: {days} days left",
+    "Rodent resolutions pending",
+    "Beady‑eye focus mode",
+    "Pellet review meeting moved to {date}",
+    "Clutch goals only",
+    "Respect the roost",
+    "I'm not owl‑available right now",
+    "Mood: twit‑twoo but busy",
+    "Hatchlist > checklist until {date}",
+    "Hootless meeting in progress",
+    "Please leave a squeak after the hoot",
+    "Who? Me? Busy.",
+    "Do not tap the nest; owl will remember this",
+    "If urgent, consult a hedgehog",
+    "Feathered PTO until {date}",
+    "Eyes on prey, not on you",
+    "Come back when the moon clocks in",
+    "Perch perfection takes time ({days} days)",
+    "Talonted but unavailable",
+    "Hoo‑man, take a hint: later",
+    "On watch. The mice know why",
+    "Nestflix and chill (until {date})",
+  ];
+
   // Countdown Timer
   useEffect(() => {
-    const now = new Date();
     const launchDate = new Date("2026-01-01T00:00:00").getTime();
 
     const updateCountdown = () => {
@@ -76,7 +126,7 @@ export default function PlayfulAnimation() {
       const rightX = e.clientX - (rightRect.left + rightRect.width / 2);
       const rightY = e.clientY - (rightRect.top + rightRect.height / 2);
 
-      const maxMove = 8; // Increased for more movement
+      const maxMove = 8;
       const leftMoveX = Math.max(-maxMove, Math.min(maxMove, leftX / 8));
       const leftMoveY = Math.max(-maxMove, Math.min(maxMove, leftY / 8));
       const rightMoveX = Math.max(-maxMove, Math.min(maxMove, rightX / 8));
@@ -92,26 +142,56 @@ export default function PlayfulAnimation() {
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Owl-themed Messages
-  const messages = [
-    "This egg is still warming up! Check back in {days} days when we officially hatch! 🦉",
-    "Hoot hoot! Not yet, friend. This little one needs {days} more days of cozy nest time! 🥚",
-    "Patience, young owl! These eggs need {days} days before they're ready to hatch! 🌙",
-    "Whooo's excited? We are! But this egg needs {days} more days in the nest! 🦉",
-    "Night shift in progress! This egg will hatch in {days} days. Worth the wait! 🌟",
-    "Parliament in session! Official hatch date: {days} days away. Stay tuned! 📅",
-    "Shhh! Genius in the making. Check back in {days} days! 🧠",
-    "This egg is under owl-thority! Hatch countdown: {days} days! 🛡️",
-    "Wise things take time! This one needs {days} more days of incubation! ⏰",
-  ];
+  // Get formatted date for quips
+  const getFormattedDate = (daysToAdd = 0) => {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
   const getDaysRemaining = () => {
     return timeLeft.days;
   };
 
+  // Get a random quip that hasn't been used recently
+  const getRandomQuip = () => {
+    // Reset used indices if we've used most quips
+    if (usedQuipIndices.size >= quips.length * 0.7) {
+      setUsedQuipIndices(new Set());
+    }
+
+    let availableIndices = quips
+      .map((_, index) => index)
+      .filter((index) => !usedQuipIndices.has(index));
+
+    // If all quips are used, reset and use any
+    if (availableIndices.length === 0) {
+      availableIndices = quips.map((_, index) => index);
+      setUsedQuipIndices(new Set());
+    }
+
+    const randomIndex =
+      availableIndices[Math.floor(Math.random() * availableIndices.length)];
+
+    // Mark this quip as used
+    setUsedQuipIndices((prev) => new Set(prev).add(randomIndex));
+
+    return quips[randomIndex];
+  };
+
   const handleEggClick = (messageIndex) => {
     const days = getDaysRemaining();
-    const message = messages[messageIndex].replace("{days}", days);
+    const randomQuip = getRandomQuip();
+
+    // Format the quip with dynamic values
+    const formattedDate = getFormattedDate(days);
+    const message = randomQuip
+      .replace(/{days}/g, days.toString())
+      .replace(/{date}/g, formattedDate);
 
     // Add bounce animation to the clicked egg
     setIsAnimating(true);
@@ -139,9 +219,12 @@ export default function PlayfulAnimation() {
       const newCount = prev + 1;
       if (newCount === 3) {
         const days = getDaysRemaining();
-        setPopupMessage(
-          `Hoot hoot! 🦉 Mama Owl says: "Thanks for being patient! Something amazing is hatching in ${days} days. Get ready for a wise new adventure!"`
-        );
+        const formattedDate = getFormattedDate(days);
+        const randomQuip = getRandomQuip()
+          .replace(/{days}/g, days.toString())
+          .replace(/{date}/g, formattedDate);
+
+        setPopupMessage(`Hoot hoot! 🦉 Mama Owl says: "${randomQuip}"`);
         setShowPopup(true);
         return 0;
       }
@@ -159,47 +242,57 @@ export default function PlayfulAnimation() {
       className="min-h-screen relative overflow-hidden"
       style={{ background: colors.background, height: "100vh" }}
     >
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-white hover:text-gray-200 font-semibold transition-colors"
+        >
+          <FiArrowLeftCircle className="w-6 h-6" />
+          <span className="hidden lg:block">Home</span>
+        </Link>
+        <Image
+          src="/careerowl-logo-hor-white.png"
+          alt="The Career Owl"
+          width={150}
+          height={30}
+          className="h-12 w-auto"
+          priority
+        />
+
+        <div></div>
+      </div>
+
       {/* Animated stars */}
       <div className="stars absolute inset-0">
-        {Array.from({ length: 200 }).map(
-          (
-            _,
-            i // More stars
-          ) => (
-            <div
-              key={i}
-              className="star absolute w-0.5 h-0.5 bg-white rounded-full animate-twinkle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 4}s`,
-                animationDuration: `${1 + Math.random() * 3}s`, // Faster twinkling
-              }}
-            />
-          )
-        )}
+        {Array.from({ length: 200 }).map((_, i) => (
+          <div
+            key={i}
+            className="star absolute w-0.5 h-0.5 bg-white rounded-full animate-twinkle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 4}s`,
+              animationDuration: `${1 + Math.random() * 3}s`,
+            }}
+          />
+        ))}
       </div>
 
       {/* Floating particles */}
       <div className="particles absolute inset-0">
-        {Array.from({ length: 50 }).map(
-          (
-            _,
-            i // More particles
-          ) => (
-            <div
-              key={i}
-              className="particle absolute w-1 h-1 rounded-full animate-float-fast"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                background: `rgba(189, 255, 0, ${0.4 + Math.random() * 0.5})`,
-                animationDelay: `${Math.random() * 8}s`,
-                animationDuration: `${8 + Math.random() * 8}s`, // Faster floating
-              }}
-            />
-          )
-        )}
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={i}
+            className="particle absolute w-1 h-1 rounded-full animate-float-fast"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: `rgba(189, 255, 0, ${0.4 + Math.random() * 0.5})`,
+              animationDelay: `${Math.random() * 8}s`,
+              animationDuration: `${8 + Math.random() * 8}s`,
+            }}
+          />
+        ))}
       </div>
 
       {/* Main Content */}
@@ -303,7 +396,7 @@ export default function PlayfulAnimation() {
                 <div className="owl-eye left absolute top-6 lg:top-8 left-5 lg:left-7 w-5 lg:w-7 h-5 lg:h-7 bg-white rounded-full border-2 border-gray-900 shadow-inner owl-blink">
                   <div
                     id="leftPupil"
-                    className="owl-pupil absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2.5 lg:w-3.5 h-2.5 lg:h-3.5 bg-black rounded-full transition-all duration-150" // Faster tracking
+                    className="owl-pupil absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2.5 lg:w-3.5 h-2.5 lg:h-3.5 bg-black rounded-full transition-all duration-150"
                   />
                 </div>
                 <div className="owl-eye right absolute top-6 lg:top-8 right-5 lg:right-7 w-5 lg:w-7 h-5 lg:h-7 bg-white rounded-full border-2 border-gray-900 shadow-inner owl-blink">
@@ -353,24 +446,20 @@ export default function PlayfulAnimation() {
         </div>
 
         {/* Bottom Info */}
-        <div className="info-section flex-shrink-0 pb-8 lg:pb-12 text-center">
-          <h1 className="text-2xl lg:text-4xl font-black text-white mb-2 animate-bounce-slow">
-            CareerOwl
-          </h1>
-          <p className="text-lg lg:text-xl text-gray-300 animate-pulse">
-            Hatching Soon 🦉
-          </p>
-        </div>
+        <div className="info-section flex-shrink-0 pb-8 lg:pb-12 text-center h-4"></div>
       </div>
 
-      {/* Message Popup - Fixed to come from center */}
+      {/* Message Popup - Centered with smooth animations */}
       {showPopup && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
           <div
-            className="overlay fixed inset-0 bg-black/80 backdrop-blur-lg z-50 animate-fade-in-fast"
+            className="absolute inset-0 bg-black/80 backdrop-blur-lg transition-opacity duration-300"
             onClick={closePopup}
           />
-          <div className="message-popup fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-3xl p-6 lg:p-8 max-w-sm lg:max-w-md w-11/12 shadow-2xl border border-white/50 backdrop-blur-sm z-50 animate-pop-up-center">
+
+          {/* Popup Content */}
+          <div className="relative bg-white rounded-3xl p-8 max-w-sm lg:max-w-md w-11/12 shadow-2xl border border-white/50 transform transition-all duration-300 scale-100 opacity-100">
             <h3
               className="text-xl lg:text-2xl font-black mb-4 text-center"
               style={{
@@ -380,14 +469,14 @@ export default function PlayfulAnimation() {
                 backgroundClip: "text",
               }}
             >
-              🥚 Hang on a minute!
+              🥚 Owl Message!
             </h3>
-            <p className="text-gray-700 leading-relaxed mb-6 text-sm lg:text-base text-center">
-              {popupMessage}
+            <p className="text-gray-700 leading-relaxed mb-6 text-sm lg:text-base text-center font-mono italic">
+              "{popupMessage}"
             </p>
             <button
               onClick={closePopup}
-              className="w-full py-3 px-6 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg animate-pulse-slow"
+              className="w-full py-3 px-6 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
               style={{
                 background: `linear-gradient(135deg, ${colors.primary} 0%, #9d4edd 100%)`,
                 boxShadow: "0 8px 25px rgba(120, 53, 94, 0.4)",
@@ -396,7 +485,7 @@ export default function PlayfulAnimation() {
               Got it!
             </button>
           </div>
-        </>
+        </div>
       )}
 
       <style jsx>{`
@@ -438,21 +527,6 @@ export default function PlayfulAnimation() {
           100% {
             transform: translateY(-300px) translateX(-30px) scale(1);
             opacity: 0;
-          }
-        }
-
-        @keyframes pop-up-center {
-          0% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.3) rotate(-10deg);
-          }
-          70% {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
-          }
-          100% {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1) rotate(0deg);
           }
         }
 
@@ -498,7 +572,7 @@ export default function PlayfulAnimation() {
             box-shadow: 0 0 60px rgba(189, 255, 0, 0.2);
           }
           50% {
-            box-shadow: 0 0 80px rgba(189, 255, 0, 0.4);
+            boxshadow: 0 0 80px rgba(189, 255, 0, 0.4);
           }
         }
 
@@ -532,48 +606,6 @@ export default function PlayfulAnimation() {
           }
         }
 
-        .animate-twinkle {
-          animation: twinkle 3s infinite;
-        }
-
-        .animate-float-fast {
-          animation: float-fast linear infinite;
-        }
-
-        .animate-float-glow {
-          animation:
-            float 6s ease-in-out infinite,
-            glow 4s ease-in-out infinite;
-        }
-
-        .animate-fade-in-fast {
-          animation: fadeIn 0.2s ease;
-        }
-
-        .animate-pop-up-center {
-          animation: pop-up-center 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .animate-glow {
-          animation: glow 3s ease-in-out infinite;
-        }
-
-        .animate-wing-flap {
-          animation: wing-flap 3s ease-in-out infinite;
-        }
-
-        .animate-branch-sway {
-          animation: branch-sway 8s ease-in-out infinite;
-        }
-
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
-        }
-
-        .animate-pulse-slow {
-          animation: pulse-slow 2s ease-in-out infinite;
-        }
-
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -595,7 +627,7 @@ export default function PlayfulAnimation() {
         }
 
         .owl-blink {
-          animation: blink 3s ease-in-out infinite; // Faster blinking
+          animation: blink 3s ease-in-out infinite;
         }
 
         .egg {
@@ -635,6 +667,40 @@ export default function PlayfulAnimation() {
             height: 16px;
           }
         }
+
+        .animate-twinkle {
+          animation: twinkle 3s infinite;
+        }
+
+        .animate-float-fast {
+          animation: float-fast linear infinite;
+        }
+
+        .animate-float-glow {
+          animation:
+            float 6s ease-in-out infinite,
+            glow 4s ease-in-out infinite;
+        }
+
+        .animate-glow {
+          animation: glow 3s ease-in-out infinite;
+        }
+
+        .animate-wing-flap {
+          animation: wing-flap 3s ease-in-out infinite;
+        }
+
+        .animate-branch-sway {
+          animation: branch-sway 8s ease-in-out infinite;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 2s ease-in-out infinite;
+        }
       `}</style>
     </div>
   );
@@ -668,7 +734,6 @@ export default function PlayfulAnimation() {
       { x: 235, y: 52, scale: 0.87 },
     ];
 
-    // Adjust for mobile
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       return positions.map((pos) => ({
         ...pos,
