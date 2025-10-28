@@ -29,10 +29,10 @@ function Footer() {
           {/* Copyright and Trademark Text */}
           <div className="text-center space-y-1">
             <p className="text-gray-600 text-sm font-medium">
-              © {currentYear} The Career Owl. All rights reserved.
+              © {currentYear} The CareerOwl™. All rights reserved.
             </p>
             <p className="text-gray-500 text-xs">
-              The Career Owl™ and the Career Owl logo are registered
+              The CareerOwl™ and the CareerOwl™ logo are registered
               trademarks.
             </p>
           </div>
