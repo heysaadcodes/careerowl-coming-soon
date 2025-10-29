@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Turnstile from "./Turnstile";
+import { emailService } from "@/lib/email";
 
 const EarlyAccessModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -117,6 +118,20 @@ const EarlyAccessModal = ({ isOpen, onClose }) => {
 
       if (!response.ok) {
         throw new Error(result.error || "Submission failed");
+      }
+
+      try {
+        const emailResult = await emailService.sendEarlyAccessEmails(formData);
+
+        if (emailResult.userEmail.success) {
+          // Success handling
+          console.log("Email sent successfully");
+        } else {
+          // Error handling
+          console.error("Failed to send email:", emailResult.userEmail.error);
+        }
+      } catch (error) {
+        console.error("Form submission error:", error);
       }
 
       setSuccess(true);
