@@ -2,7 +2,7 @@
 export const emailService = {
     sendEarlyAccessEmails: async (submission) => {
         try {
-            console.log('Sending email via API route for:', submission.email);
+            console.log('Sending emails via API route for:', submission.email);
 
             const response = await fetch(`/api/send-email`, {
                 method: 'POST',
@@ -11,25 +11,33 @@ export const emailService = {
                 },
                 body: JSON.stringify({
                     name: submission.name,
-                    email: submission.email
+                    email: submission.email,
+                    company: submission.company,
+                    focusIndustry: submission.focusIndustry
                 }),
             });
 
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.error || 'Failed to send email');
+                throw new Error(result.error || 'Failed to send emails');
             }
 
             return {
-                userEmail: result,
-                adminEmail: { success: true, note: 'Admin email skipped in API mode' }
+                userEmail: {
+                    success: true,
+                    messageId: result.userMessageId
+                },
+                adminEmail: {
+                    success: true,
+                    messageId: result.adminMessageId
+                }
             };
         } catch (error) {
             console.error('Error in email service:', error);
             return {
                 userEmail: { success: false, error: error.message },
-                adminEmail: { success: false, error: 'Admin email failed' }
+                adminEmail: { success: false, error: error.message }
             };
         }
     }

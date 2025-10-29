@@ -4,9 +4,9 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request) {
     try {
-        const { name, email } = await request.json();
+        const { name, email, company, focusIndustry } = await request.json();
 
-        console.log('Attempting to send email to:', email);
+        console.log('Attempting to send emails for:', email);
 
         // Create a fresh transporter for each request
         const transporter = nodemailer.createTransport({
@@ -21,7 +21,6 @@ export async function POST(request) {
                 rejectUnauthorized: false,
                 ciphers: 'SSLv3'
             },
-            // Vercel-specific settings
             connectionTimeout: 10000,
             greetingTimeout: 10000,
             socketTimeout: 10000,
@@ -30,7 +29,8 @@ export async function POST(request) {
         // Verify connection
         await transporter.verify();
 
-        const mailOptions = {
+        // 1. Send confirmation email to user
+        const userMailOptions = {
             from: '"CareerOwl™" <hoot@thecareerowl.ca>',
             to: email,
             subject: 'Welcome to CareerOwl™ Early Access!',
@@ -78,12 +78,70 @@ export async function POST(request) {
             text: `Welcome to Early Access, ${name}!\n\nThank you for submitting your details...`
         };
 
-        const result = await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully:', result.messageId);
+        // 2. Send notification email to admin
+        const adminMailOptions = {
+            from: '"CareerOwl™ System" <hoot@thecareerowl.ca>',
+            to: process.env.ADMIN_EMAIL || 'info@thecareerowl.ca',
+            subject: '🎉 New Early Access Signup - CareerOwl™',
+            html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f8f9fa; }
+            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            .header { background: #78355e; color: white; padding: 20px; text-align: center; }
+            .content { padding: 30px; }
+            .info-box { background: #f1f3f4; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .highlight { color: #78355e; font-weight: bold; }
+            .field { margin-bottom: 10px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h2>New Early Access Signup!</h2>
+            </div>
+            <div class="content">
+              <h3>A new user has joined CareerOwl™ Early Access!</h3>
+              
+              <div class="info-box">
+                <div class="field"><strong>Name:</strong> ${name}</div>
+                <div class="field"><strong>Email:</strong> ${email}</div>
+                <div class="field"><strong>Company:</strong> ${company || 'Not provided'}</div>
+                <div class="field"><strong>Focus Industry:</strong> ${focusIndustry || 'Not provided'}</div>
+              </div>
+              
+              <p><span class="highlight">Total early access participants are growing!</span></p>
+              <p>This user has been automatically added to our early access list and will receive platform updates as we approach launch.</p>
+              
+              <p><strong>Next Steps:</strong></p>
+              <ul>
+                <li>User has received welcome email confirmation</li>
+                <li>Added to early access participant database</li>
+                <li>Will be notified when platform launches</li>
+              </ul>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+            text: `New Early Access Signup:\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nFocus Industry: ${focusIndustry || 'Not provided'}\nSubmitted: ${new Date().toLocaleString()}\n\nTotal early access participants are growing!`
+        };
+
+        // Send both emails
+        const userResult = await transporter.sendMail(userMailOptions);
+        console.log('User email sent successfully:', userResult.messageId);
+
+        const adminResult = await transporter.sendMail(adminMailOptions);
+        console.log('Admin email sent successfully:', adminResult.messageId);
 
         return NextResponse.json({
             success: true,
-            messageId: result.messageId
+            userMessageId: userResult.messageId,
+            adminMessageId: adminResult.messageId,
+            message: 'Both user confirmation and admin notification emails sent successfully'
         });
 
     } catch (error) {
