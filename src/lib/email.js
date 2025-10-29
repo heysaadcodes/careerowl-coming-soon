@@ -32,7 +32,6 @@ export const emailTemplates = {
     userConfirmation: (name, email) => ({
         from: '"CareerOwl™" <hoot@thecareerowl.ca>',
         to: email,
-        replyTo: 'support@thecareerowl.ca',
         subject: 'Welcome to CareerOwl™ Early Access!',
         headers: {
             'List-Unsubscribe': `<mailto:unsubscribe@thecareerowl.ca?subject=Unsubscribe&body=Please unsubscribe ${email}>, <https://thecareerowl.ca/unsubscribe?email=${encodeURIComponent(email)}>`,
@@ -114,7 +113,7 @@ The CareerOwl™ Team`
     adminNotification: (submission) => ({
         from: '"CareerOwl™ System" <hoot@thecareerowl.ca>',
         to: process.env.ADMIN_EMAIL,
-        subject: '🎯 New Early Access Registration - CareerOwl™',
+        subject: 'New Early Access Registration - CareerOwl™',
         html: `
 <!DOCTYPE html>
 <html>
@@ -136,7 +135,7 @@ The CareerOwl™ Team`
         <p><strong>Email:</strong> ${submission.email}</p>
         <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
         <br>
-        <p>Total early access participants are growing! 🎉</p>
+        <p>Total early access participants are growing!</p>
     </div>
 </body>
 </html>
