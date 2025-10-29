@@ -82,7 +82,7 @@ export async function POST(request) {
         const adminMailOptions = {
             from: '"CareerOwl™ System" <hoot@thecareerowl.ca>',
             to: process.env.ADMIN_EMAIL || 'info@thecareerowl.ca',
-            subject: '🎉 New Early Access Signup - CareerOwl™',
+            subject: 'New Early Access Signup - CareerOwl™',
             html: `
         <!DOCTYPE html>
         <html>
@@ -115,13 +115,6 @@ export async function POST(request) {
               
               <p><span class="highlight">Total early access participants are growing!</span></p>
               <p>This user has been automatically added to our early access list and will receive platform updates as we approach launch.</p>
-              
-              <p><strong>Next Steps:</strong></p>
-              <ul>
-                <li>User has received welcome email confirmation</li>
-                <li>Added to early access participant database</li>
-                <li>Will be notified when platform launches</li>
-              </ul>
             </div>
           </div>
         </body>
