@@ -4,7 +4,7 @@ export const emailService = {
         try {
             console.log('Sending email via API route for:', submission.email);
 
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/send-email`, {
+            const response = await fetch(`/api/send-email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
