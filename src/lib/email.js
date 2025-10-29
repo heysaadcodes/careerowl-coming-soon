@@ -57,8 +57,7 @@ export const emailTemplates = {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🦉 CareerOwl™</h1>
-            <p>Smart Career Development</p>
+            <h1>CareerOwl™</h1>
         </div>
         <div class="content">
             <h2>Welcome to Early Access, ${name}!</h2>
@@ -129,7 +128,7 @@ The CareerOwl™ Team`
 </head>
 <body>
     <div class="header">
-        <h2>🦉 New Early Access Registration</h2>
+        <h2>New Early Access Registration</h2>
     </div>
     <div class="content">
         <h3>New participant joined CareerOwl™ early access!</h3>
