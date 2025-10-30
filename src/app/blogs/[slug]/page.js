@@ -44,7 +44,7 @@ const BlogDetailPage = () => {
       <div className="max-w-7xl mx-auto px-4 pt-8 flex items-center justify-between">
         <Link href="/blogs" className="inline-flex items-center gap-2 text-black hover:text-gray-800 font-semibold transition-colors">
           <FiArrowLeftCircle className="w-6 h-6" />
-          <span>Back to Blogs</span>
+          <span className='hidden lg:block'>Back to Blogs</span>
         </Link>
         <Image src="/careerowl-logo-hor.svg" alt="The Career Owl" width={150} height={30} className="h-8 w-auto" priority />
         <div></div>

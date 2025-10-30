@@ -33,7 +33,7 @@ const RecentBlogs = () => {
               className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
             >
               {/* Blog Image */}
-              <div className="relative h-48 bg-gradient-to-br from-[#78355e] to-[#9d4577] overflow-hidden">
+              <div className="relative h-50 bg-gradient-to-br from-[#78355e] to-[#9d4577] overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img
                     src={blog.coverImage}
