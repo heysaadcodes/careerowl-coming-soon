@@ -78,7 +78,7 @@ const BlogDetailPage = () => {
         </div>
 
         {/* Featured Image/Banner */}
-        <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-[#78355e] to-[#9d4577] rounded-2xl overflow-hidden mb-12 shadow-xl">
+        <div className="relative h-28 sm:h-80 lg:h-96 bg-gradient-to-br from-[#78355e] to-[#9d4577] rounded-2xl overflow-hidden mb-12 shadow-xl">
           <div className="absolute inset-0 flex items-center justify-center">
             <Image
               src={blog.image}
