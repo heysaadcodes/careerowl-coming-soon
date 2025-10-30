@@ -33,7 +33,7 @@ export async function POST(request) {
     const userMailOptions = {
       from: '"CareerOwl™" <hoot@thecareerowl.ca>',
       to: email,
-      subject: 'Welcome to the Future of Hiring in Canada – CareerOwl Early Access',
+      subject: 'Welcome to the Future of Hiring in Canada – CareerOwl™ Early Access',
       html: `
 <!DOCTYPE html>
 <html>
@@ -61,13 +61,13 @@ export async function POST(request) {
         <div class="content">
             <h2>Hello ${name},</h2>
             
-            <p>Thank you for joining the Early Access list for CareerOwl. You are now part of something truly new in Canada: the first job platform built from the ground up to serve Canadian applicants, employers, and recruiters.</p>
+            <p>Thank you for joining the Early Access list for CareerOwl™. You are now part of something truly new in Canada: the first job platform built from the ground up to serve Canadian applicants, employers, and recruiters.</p>
             
             <div class="cta-box">
                 Launching January 2026
             </div>
             
-            <p><strong>CareerOwl is not just another job board.</strong> It is a smarter, fairer, and more transparent ecosystem designed to make every step of hiring and applying easier. As one of our early supporters, you'll soon be among the first to experience features like:</p>
+            <p><strong>CareerOwl™ is not just another job board.</strong> It is a smarter, fairer, and more transparent ecosystem designed to make every step of hiring and applying easier. As one of our early supporters, you'll soon be among the first to experience features like:</p>
             
             <ul class="feature-list">
                 <li class="feature-item"><strong>Guided job postings</strong> with Canadian NOC alignment and wage insights</li>
@@ -87,24 +87,24 @@ export async function POST(request) {
             
             <div class="signature">
                 <p><strong>Wise Choices, Bright Careers.</strong><br>
-                The CareerOwl Team</p>
+                The CareerOwl™ Team</p>
             </div>
         </div>
         <div class="footer">
             <p>&copy; ${new Date().getFullYear()} CareerOwl™. All rights reserved.</p>
-            <p>You're receiving this email because you signed up for early access at CareerOwl.</p>
+            <p>You're receiving this email because you signed up for early access at CareerOwl™.</p>
         </div>
     </div>
 </body>
 </html>
             `,
-      text: `Welcome to the Future of Hiring in Canada – CareerOwl Early Access
+      text: `Welcome to the Future of Hiring in Canada – CareerOwl™ Early Access
 
 Hello ${name},
 
-Thank you for joining the Early Access list for CareerOwl. You are now part of something truly new in Canada: the first job platform built from the ground up to serve Canadian applicants, employers, and recruiters.
+Thank you for joining the Early Access list for CareerOwl™. You are now part of something truly new in Canada: the first job platform built from the ground up to serve Canadian applicants, employers, and recruiters.
 
-CareerOwl is not just another job board. It is a smarter, fairer, and more transparent ecosystem designed to make every step of hiring and applying easier. As one of our early supporters, you'll soon be among the first to experience features like:
+CareerOwl™ is not just another job board. It is a smarter, fairer, and more transparent ecosystem designed to make every step of hiring and applying easier. As one of our early supporters, you'll soon be among the first to experience features like:
 
 • Guided job postings with Canadian NOC alignment and wage insights
 • AI-powered resume match scoring and improvement tips
@@ -121,7 +121,7 @@ We cannot wait to share the full experience with you when we launch in January 2
 The owl is taking flight, and you are part of the journey.
 
 Wise Choices, Bright Careers.
-The CareerOwl Team`
+The CareerOwl™ Team`
     };
 
     // 2. Send notification email to admin (UNCHANGED)
