@@ -86,7 +86,7 @@ const BlogsPage = () => {
             {filteredBlogs.map((blog) => (
               <Link
                 key={blog.id}
-                href={`/blogs/${blog.slug}`}
+                href={blog.blogURL}
                 className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#2563eb] transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
               >
                 {/* Blog Image */}
