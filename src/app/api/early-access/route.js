@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import EarlyAccess from '@/models/EarlyAccess';
 import { emailService } from '@/lib/email';
+import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   try {
@@ -99,32 +100,50 @@ export async function POST(request) {
     );
   }
 }
-// GET - Fetch all early access submissions (for admin)
+
+
 export async function GET(request) {
   try {
     await connectDB();
 
-    // Basic authentication for admin endpoint
+    // JWT authentication
     const authHeader = request.headers.get('authorization');
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.replace('Bearer ', '');
-      // In production, use a proper token verification
-      if (token !== process.env.ADMIN_TOKEN) {
-        return NextResponse.json(
-          { error: 'Unauthorized' },
-          { status: 401 }
-        );
-      }
-    } else {
+    console.log("Auth header:", authHeader);
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log("No or invalid authorization header");
       return NextResponse.json(
         { error: 'Authorization header required' },
         { status: 401 }
       );
     }
 
+    const token = authHeader.replace('Bearer ', '');
+    const JWT_SECRET = process.env.JWT_SECRET || "your-fallback-secret";
+
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+
+      // Check if user is admin
+      if (!decoded.isAdmin) {
+        console.log("User is not admin");
+        return NextResponse.json(
+          { error: 'Unauthorized' },
+          { status: 401 }
+        );
+      }
+
+    } catch (error) {
+      console.error("Token verification failed:", error.message);
+      return NextResponse.json(
+        { error: `Invalid token: ${error.message}` },
+        { status: 401 }
+      );
+    }
+
     const submissions = await EarlyAccess.find({})
       .sort({ createdAt: -1 })
-      .select('-__v') // Exclude version key
+      .select('-__v')
       .lean();
 
     return NextResponse.json(

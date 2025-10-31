@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   try {
@@ -11,15 +12,26 @@ export async function POST(request) {
       );
     }
 
-
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "support@thecareerowl.ca";
     const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "careerowl123";
+    const JWT_SECRET = process.env.JWT_SECRET || "your-fallback-secret-here";
 
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      // Generate JWT token
+      const token = jwt.sign(
+        {
+          email: email,
+          isAdmin: true
+        },
+        JWT_SECRET,
+        { expiresIn: '1h' } // Token expires in 1 hour
+      );
+
       return NextResponse.json(
         {
           message: "Login successful",
           isAdmin: true,
+          token: token, // This is the crucial part - return the token
         },
         { status: 200 }
       );
