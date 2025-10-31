@@ -44,7 +44,6 @@ export default function AdminPage() {
       });
 
       const result = await response.json();
-      console.log("Login response:", result);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -56,7 +55,6 @@ export default function AdminPage() {
       }
       if (result.isAdmin && result.token) {
         localStorage.setItem('adminToken', result.token);
-        console.log("Stored token:", result.token);
         setIsAdmin(true);
       }
     } catch (err) {
