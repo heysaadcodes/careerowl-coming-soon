@@ -16,7 +16,7 @@ export const metadata = {
     },
     metadataBase: new URL('https://thecareerowl.ca'),
     alternates: {
-        canonical: '/',
+        canonical: 'https://thecareerowl.ca',
     },
     openGraph: {
         title: 'CareerOwl - Wise Choices, Bright Careers | Canada\'s leading recruitment tool for Job Seekers, Employers and Recruiters',
