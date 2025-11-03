@@ -81,7 +81,7 @@ export default function PlayfulAnimation() {
 
   // Countdown Timer
   useEffect(() => {
-    const launchDate = new Date("2026-01-01T00:00:00").getTime();
+    const launchDate = new Date("2026-01-16T00:00:00").getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
