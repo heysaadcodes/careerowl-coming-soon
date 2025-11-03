@@ -78,7 +78,7 @@ const BlogDetailPage = () => {
         image: [
           {
             "@type": "ImageObject",
-            url: blog.image,
+            url: `https://thecareerowl.ca${blog.image}`,
             width: 1200,
             height: 630,
           },

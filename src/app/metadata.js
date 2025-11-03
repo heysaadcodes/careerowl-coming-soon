@@ -25,7 +25,7 @@ export const metadata = {
         siteName: 'CareerOwl',
         images: [
             {
-                url: '/og-image.jpg', // You'll need to create this
+                url: '/new-owl-logo.svg',
                 width: 1200,
                 height: 630,
                 alt: 'CareerOwl - Launching Soon',
@@ -38,7 +38,7 @@ export const metadata = {
         card: 'summary_large_image',
         title: 'CareerOwl - Wise Choices, Bright Careers | Canada\'s leading recruitment tool for Job Seekers, Employers and Recruiters',
         description: 'Get early access to our innovative AI-powered career development platform.',
-        images: ['/og-image.jpg'],
+        images: ['/new-owl-logo.svg'],
         creator: '@careerowl',
     },
     robots: {
@@ -53,6 +53,11 @@ export const metadata = {
         },
     },
     verification: {
-        google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION, // Add your verification code
+        google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
+    },
+    icons: {
+        icon: '/favicon.ico',
+        shortcut: '/favicon-16x16.png',
+        apple: '/apple-touch-icon.png',
     },
 }
