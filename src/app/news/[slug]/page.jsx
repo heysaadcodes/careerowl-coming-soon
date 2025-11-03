@@ -24,8 +24,7 @@ const BlogDetailPage = () => {
         "@type": "Organization",
         name: "CareerOwl Ltd.",
         legalName: "CareerOwl Ltd.",
-        url: "https://thecareerowl.ca/",
-        logo: "https://thecareerowl.ca/assets/logo.png",
+        url: "https://thecareerowl.ca/new-owl-logo.svg",
         foundingDate: "1999",
         address: {
           "@type": "PostalAddress",
@@ -72,7 +71,7 @@ const BlogDetailPage = () => {
           name: "CareerOwl Ltd.",
           logo: {
             "@type": "ImageObject",
-            url: "https://thecareerowl.ca/assets/logo.png",
+            url: "https://thecareerowl.ca/new-owl-logo.svg",
           },
           url: "https://thecareerowl.ca/",
         },
