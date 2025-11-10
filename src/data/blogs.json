@@ -12,6 +12,7 @@
       "category": "Press Release",
       "coverImage": "/A New Chapter begins.svg",
       "image": "/blogs/A New Chapter Begins.svg",
+      "blogImageURL": "https://thecareerowl.ca/blogs/A%20New%20Chapter%20Begins.svg",
       "content": [
         {
           "type": "heading",
@@ -115,6 +116,7 @@
       "category": "Features",
       "coverImage": "/Seeds of Change.svg",
       "image": "/blogs/Seeds of Change.svg",
+      "contentImageURL": "https://thecareerowl.ca/blogs/Seeds%20of%20Change.svg",
       "content": [
         {
           "type": "heading",
@@ -306,6 +308,7 @@
       "category": "Launch",
       "coverImage": "/The Owl is Taking Flight Again.svg",
       "image": "/blogs/The Owl is Taking Flight Again.svg",
+      "blogImageURL": "https://thecareerowl.ca/blogs/The%20Owl%20is%20Taking%20Flight%20Again.svg",
       "content": [
         {
           "type": "heading",
@@ -517,6 +520,7 @@
       "category": "Vision",
       "coverImage": "/The Vision for the New CareerOwl.svg",
       "image": "/blogs/The Vision for the New CareerOwl.svg",
+      "blogImageURL": "https://thecareerowl.ca/blogs/The%20Vision%20for%20the%20New%20CareerOwl.svg",
       "content": [
         {
           "type": "heading",
@@ -676,6 +680,7 @@
       "category": "Transformation",
       "coverImage": "/From Purpose to Power.svg",
       "image": "/blogs/From Purpose to Power.svg",
+      "blogImageURL": "https://thecareerowl.ca/blogs/From%20Purpose%20to%20Power.svg",
       "content": [
         {
           "type": "heading",
