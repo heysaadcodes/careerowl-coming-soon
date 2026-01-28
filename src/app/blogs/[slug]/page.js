@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowLeftCircle } from 'react-icons/fi';
-import blogsData from '@/data/posts.json';
+import blogsData from '@/data/blogs.json';
 import CallToAction from '@/components/CallToAction';
 import Image from 'next/image';
 import Head from 'next/head';
