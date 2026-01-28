@@ -341,17 +341,32 @@ const BlogDetailPage = () => {
                     </h3>
                   );
 
-                case "link":
+case "link":
                   return (
                     <div key={index} className="my-8 p-4 bg-blue-50 border border-blue-100 rounded-lg">
                       <a
                         href={section.href}
                         download={section.download === true ? "CareerOwl-Document.pdf" : section.download}
                         className="flex items-center gap-2 text-blue-700 font-bold hover:underline text-lg"
-                        target="_blank"
+                        target="_blank" 
                         rel="noopener noreferrer"
+                        
+                        // --- TRACKING CODE STARTS HERE ---
+                        onClick={() => {
+                          // 1. Check if Google Analytics is loaded on the window
+                          if (typeof window !== "undefined" && window.gtag) {
+                            window.gtag("event", "file_download", {
+                              file_name: section.download === true ? "CareerOwl-Document.pdf" : section.download,
+                              file_extension: "pdf",
+                              link_text: section.text,
+                              category: "Press Release"
+                            });
+                            console.log("GA Event Sent: Downloaded Media Statement"); // Optional: For your testing
+                          }
+                        }}
+                        // --------------------------------
                       >
-                        <span className="text-2xl">📄</span>
+                        <span className="text-2xl">📄</span> 
                         {section.text}
                       </a>
                     </div>
