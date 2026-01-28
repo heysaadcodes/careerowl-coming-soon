@@ -17,12 +17,12 @@ const Page = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const launchDate = new Date('2026-01-30T00:00:00').getTime();
+  const launchDate = new Date('2026-02-06T00:00:00').getTime();
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const difference = launchDate - now;
+      const difference = launchDate - now; 
 
       if (difference > 0) {
         setTimeLeft({
