@@ -307,7 +307,7 @@ const BlogDetailPage = () => {
                     <p
                       key={index}
                       className="text-gray-900 leading-relaxed mb-6 text-lg"
-                      dangerouslySetInnerHTML={{ __html: section.text }}
+                      dangerouslySetInnerHTML={{ __html: cleanHtml }}
                     />
                   );
                 default:
