@@ -95,8 +95,10 @@
           "text": "For official updates, media requests, or partnership opportunities, please contact:"
         },
         {
-          "type": "paragraph",
-          "text": "<strong>Official Release:</strong> <a href='/assets/documents/media-statement.pdf' download='CareerOwl-Media-Statement.pdf' class='text-blue-600 hover:underline'>Download Media Statement (PDF)</a>"
+          "type": "link",
+          "text": "CareerOwl™ Relaunch Media Statement (PDF)",
+          "href": "/assets/documents/media-statement.pdf",
+          "download": true
         },
         {
           "type": "paragraph",

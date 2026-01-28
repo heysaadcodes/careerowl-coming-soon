@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiUser, FiTag, FiCalendar, FiArrowLeftCircle } from "react-icons/fi";
-import blogsData from "@/data/blogs.json";
+import blogsData from "@/data/posts.json";
 import CallToAction from "@/components/CallToAction";
 import Image from "next/image";
 import Head from "next/head";
@@ -340,6 +340,23 @@ const BlogDetailPage = () => {
                       {section.text}
                     </h3>
                   );
+
+                case "link":
+                  return (
+                    <div key={index} className="my-8 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                      <a
+                        href={section.href}
+                        download={section.download === true ? "CareerOwl-Document.pdf" : section.download}
+                        className="flex items-center gap-2 text-blue-700 font-bold hover:underline text-lg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <span className="text-2xl">📄</span>
+                        {section.text}
+                      </a>
+                    </div>
+                  );
+
                 case "paragraph":
                   return (
                     <p

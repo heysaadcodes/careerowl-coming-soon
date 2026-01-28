@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { FiUser, FiTag, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowLeftCircle } from 'react-icons/fi';
-import blogsData from '@/data/blogs.json';
+import blogsData from '@/data/posts.json';
 import CallToAction from '@/components/CallToAction';
 import Image from 'next/image';
 import Head from 'next/head';
@@ -283,6 +283,7 @@ const BlogDetailPage = () => {
           {/* Blog Content */}
           <article className="prose prose-lg max-w-none">
             {blog.content.map((section, index) => {
+              console.log("SECTION TYPE:", section.type);
               switch (section.type) {
                 case 'heading':
                   return (
@@ -307,9 +308,24 @@ const BlogDetailPage = () => {
                     <p
                       key={index}
                       className="text-gray-900 leading-relaxed mb-6 text-lg"
-                      dangerouslySetInnerHTML={{ __html: cleanHtml }}
-                    />
+                    >
+                      {section.text}
+                    </p>
                   );
+
+                case "link":
+                  return (
+                    <div key={index} className="my-6">
+                      <a
+                        href={section.href}
+                        download={section.download}
+                        className="inline-block text-blue-600 underline font-semibold"
+                      >
+                        📄 {section.text}
+                      </a>
+                    </div>
+                  );
+
                 default:
                   return null;
               }
