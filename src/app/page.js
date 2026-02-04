@@ -123,7 +123,7 @@ const Page = () => {
                 </div>
               ))}
             </div>
-
+            {/* Get Early Access Button 
             <div className="w-full flex items-center justify-center mb-6">
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -131,7 +131,7 @@ const Page = () => {
               >
                 Get early access
               </button>
-            </div>
+            </div>*/}
 
             {/* Social Links */}
             <div className="flex justify-center gap-3 sm:gap-4 lg:gap-5 xl:gap-6 items-center mt-6">
